@@ -2,7 +2,7 @@ from stack import Stack
 
 
 def main():
-    option = ''
+    option = ""
     print("WELCOME TO HANOI TOWERS GAME!")
     while verify_option(option, 1, 2) == False:
         option = input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ")
@@ -11,15 +11,18 @@ def main():
     else:
         existing_game()
 
-def verify_option(value:int, minimum:int, maximum:int):
+
+def verify_option(value: int, minimum: int, maximum: int):
     if value.isdigit() != True:
         return False
     elif minimum > int(value) or maximum < int(value):
         return False
     return True
 
+
 def new_game():
     pass
+
 
 def existing_game():
     pass
@@ -60,9 +63,11 @@ class Tower:
         """
         if not isinstance(item, int):
             return False
-        top = self._stack.top()
-        if top == None or top < item:
-            return False
+        if not self._stack.is_empty():
+            # needed because stack.top will print if its empty
+            top = self._stack.top()
+            if top != None and top < item:
+                return False
         if not self.get_width() > item > 0:
             return False
 
@@ -112,7 +117,6 @@ class Tower:
 class Hanoi:
     def __init__(self, games: int, rings):
         self._game: list[Tower] = [Tower(rings, rings)]
-
         for i in range(games - 1):
             self._game += [Tower(0, rings)]
 
