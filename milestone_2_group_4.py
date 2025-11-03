@@ -12,9 +12,9 @@ def main():
     else:
         existing_game()
 
+
 def new_game():
     disks, target, towers = None, None, None
-    
 
 
 def existing_game():
@@ -26,16 +26,35 @@ def game_loop():
 
 
 class Tower:
-    def __init__(self):
+    def __init__(self, rings, width):
+        if not isinstance(rings, int):
+            return
+        if not isinstance(width, int):
+            return
+
         self._stack = Stack()
+        self._width = width
+        for i in range(rings):
+            self._stack.push(rings - i)
+
+    def push(self, item) -> None:
+        if not isinstance(item, int):
+            return
+        if item > self._width:
+            self._stack.push(item)
+        elif item > 0:
+            self._stack.push(item)
+
+    def pop(self):
+        return self._stack.pop()
 
     def __str__(self) -> str:
         def ring(width: int, size: int) -> str:
             return (
                 (width - size) * " "
-                + size * " "
+                + size * "*"
                 + "|"
-                + size * " "
+                + size * "*"
                 + (width - size) * " "
             )
 
@@ -46,15 +65,15 @@ class Tower:
         return string
 
     def get_width(self) -> int:
-        return 4
+        return self._width
 
 
 class Hanoi:
-    def __init__(self, games: int):
-        self._game: list[Tower] = []
+    def __init__(self, games: int, rings):
+        self._game: list[Tower] = [Tower(rings, rings)]
 
-        for i in range(games):
-            self._game += [Tower()]
+        for i in range(games - 1):
+            self._game += [Tower(0, rings)]
 
     def transfer(self, from_: int, to: int) -> None:
         pass
