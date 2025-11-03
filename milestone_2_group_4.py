@@ -1,3 +1,4 @@
+from _typeshed import Self
 from stack import Stack
 
 
@@ -39,11 +40,19 @@ class Tower:
 
 
 class Hanoi:
+    def __init__(self, games: int):
+        self._game:list[Tower] = []
+
+        for i in range(games):
+            self._game += [Tower()]
+
     def transfer(self, from_: int, to: int) -> None:
         pass
 
     def __str__(self) -> str:
-        return f""
+        for tower in self._game:
+
+
 
     def is_complete(self) -> bool:
         return False
