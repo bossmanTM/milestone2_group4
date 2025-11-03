@@ -2,7 +2,7 @@ from stack import Stack
 
 
 def main():
-    option = 0
+    option = None
     print("WELCOME TO HANOI TOWERS GAME!")
     while option.isdigit() != True and option not in [1, 2]:
         option = input("Enter 1 to Start a new game and 2 to Resume a saved game: ")
@@ -12,7 +12,8 @@ def main():
         existing_game()
 
 def new_game():
-    pass
+    disks, target, towers = None, None, None
+    
 
 
 def existing_game():
