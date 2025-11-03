@@ -42,9 +42,9 @@ class Tower:
             return
 
         self._stack = Stack()
-        self._width = width
         for i in range(rings):
-            self._stack.push(i)
+            self._stack.push(i + 1)
+        self._width = width
 
     def push(self, item) -> bool:
         """add a ring to the tower\\
@@ -60,10 +60,12 @@ class Tower:
             return False
 
         if item > self._width:
-            self._stack.push(item)
+            self._stack.push(self._width)
+            return True
         elif item > 0:
             self._stack.push(item)
-        return True
+            return True
+        return False
 
     def pop(self):
         """removes a ring from the tower"""
@@ -95,9 +97,9 @@ class Tower:
         lst: list[int] = self._stack.get_lst()
         for i in range(self._width):
             if i < len(lst):
-                string += ring(len(lst), lst[i]) + "\n"
+                string += ring(self._width, lst[-(i + 1)]) + "\n"
             else:
-                string += ring(len(lst), 0) + "\n"
+                string += ring(self._width, 0) + "\n"
         return string
 
     def get_width(self) -> int:
