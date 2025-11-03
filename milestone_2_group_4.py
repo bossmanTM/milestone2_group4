@@ -1,3 +1,6 @@
+from stack import Stack
+
+
 def main():
     new_input = input("do you want to start a new game or load an existing one")
 
@@ -11,10 +14,6 @@ def existing_game():
 
 
 def game_loop():
-    pass
-
-
-class Stack:
     pass
 
 
@@ -34,5 +33,4 @@ class Hanoi(Tower):
 
     def towers(self) -> None:
         """prints the towers in the game window"""
-
         pass
