@@ -17,11 +17,28 @@ def game_loop():
     pass
 
 
-class Tower(Stack):
-    pass
+class Tower:
+    def __init__(self):
+        self._stack = Stack()
+
+    def __str__(self) -> str:
+        def ring(width: int, size: int) -> str:
+            return (
+                (width - size) * " "
+                + size * " "
+                + "|"
+                + size * " "
+                + (width - size) * " "
+            )
+
+        string = ""
+        lst: list[int] = self._stack.get_lst()
+        for item in lst:
+            string += ring(len(lst), item) + "\n"
+        return string
 
 
-class Hanoi(Tower):
+class Hanoi:
     def transfer(self, from_: int, to: int) -> None:
         pass
 
