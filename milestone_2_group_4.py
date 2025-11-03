@@ -19,6 +19,8 @@ def verify_option(value:int, minimum:int, maximum:int):
         return False
     return True
 
+def new_game():
+    pass
 
 def existing_game():
     pass
