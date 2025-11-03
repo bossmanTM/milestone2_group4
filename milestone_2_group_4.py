@@ -95,11 +95,12 @@ class Tower:
 
         string = ""
         lst: list[int] = self._stack.get_lst()
-        for i in range(self._width):
+        width = self.get_width()
+        for i in range(width):
             if i < len(lst):
-                string += ring(self._width, lst[-(i + 1)]) + "\n"
+                string += ring(width, lst[-(i + 1)]) + "\n"
             else:
-                string += ring(self._width, 0) + "\n"
+                string += ring(width, 0) + "\n"
         return string
 
     def get_width(self) -> int:
