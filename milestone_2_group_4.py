@@ -4,10 +4,12 @@ from stack import Stack
 def main():
     option = 0
     print("WELCOME TO HANOI TOWERS GAME!")
-    while option not in [1, 2]:
+    while option.isdigit() != True and option not in [1, 2]:
         option = input("Enter 1 to Start a new game and 2 to Resume a saved game: ")
-        #new_input = input("do you want to start a new game or load an existing one")
-
+    if option = 1:
+        new_game()
+    else:
+        existing_game()
 
 def new_game():
     pass
