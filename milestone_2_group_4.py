@@ -58,14 +58,11 @@ class Tower:
         top = self._stack.top()
         if top == None or top < item:
             return False
+        if not self.get_width() > item > 0:
+            return False
 
-        if item > self._width:
-            self._stack.push(self._width)
-            return True
-        elif item > 0:
-            self._stack.push(item)
-            return True
-        return False
+        self._stack.push(item)
+        return True
 
     def pop(self):
         """removes a ring from the tower"""
