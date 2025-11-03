@@ -51,7 +51,7 @@ class Tower:
         self._width = width
         self._stack = Stack()
         for i in range(rings):
-            self.push(i + 1)
+            self.push(rings - i)
 
     def push(self, item) -> bool:
         """add a ring to the tower\\
@@ -104,7 +104,7 @@ class Tower:
         width = self.get_width()
         for i in range(width):
             if i < len(lst):
-                string += ring(width, lst[-(i + 1)]) + "\n"
+                string += ring(width, lst[i]) + "\n"
             else:
                 string += ring(width, 0) + "\n"
         return string
@@ -116,7 +116,7 @@ class Tower:
 class Hanoi:
     def __init__(self, games: int, rings):
         self._game: list[Tower] = [Tower(rings, rings)]
-        for i in range(games - 1):
+        for i in range(games - 2):
             self._game += [Tower(0, rings)]
 
     def transfer(self, from_: int, to: int) -> None:
