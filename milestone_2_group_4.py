@@ -6,7 +6,7 @@ def main():
     print("WELCOME TO HANOI TOWERS GAME!")
     while option.isdigit() != True and option not in [1, 2]:
         option = input("Enter 1 to Start a new game and 2 to Resume a saved game: ")
-    if option = 1:
+    if option == 1:
         new_game()
     else:
         existing_game()
