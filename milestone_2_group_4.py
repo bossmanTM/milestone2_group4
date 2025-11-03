@@ -50,7 +50,7 @@ class Tower:
             return
         self._width = width
         self._stack = Stack()
-        for i in range(rings):
+        for i in range(rings + 1):
             self.push(rings - i)
 
     def push(self, item) -> bool:
@@ -67,7 +67,7 @@ class Tower:
             top = self._stack.top()
             if top != None and top < item:
                 return False
-        if not self.get_width() > item > 0:
+        if not self.get_width() >= item > 0:
             return False
 
         self._stack.push(item)
@@ -114,15 +114,32 @@ class Tower:
 
 
 class Hanoi:
-    def __init__(self, games: int, rings):
-        self._game: list[Tower] = [Tower(rings, rings)]
-        for i in range(games - 2):
-            self._game += [Tower(0, rings)]
+    def __init__(self, towers, disks, target):
+        """defines a Hanoi board
+        towers = the amount of towers in the board
+        disks = the number of disks in the first tower
+        target = the tower you are trying to get all the disks to
+        """
+        if not isinstance(towers, int):
+            return
+        if not isinstance(disks, int):
+            return
+        if not isinstance(target, int):
+            return
 
-    def transfer(self, from_: int, to: int) -> None:
-        pass
+        self._game: list[Tower] = [Tower(disks, disks)]
+        for i in range(towers - 1):
+            self._game += [Tower(0, disks)]
+
+    def transfer(self, start: int, end: int) -> bool:
+        """transfers one disc from a start board to an end
+        returns True if it succeeds
+        """
+        return False
 
     def __str__(self) -> str:
+        """string prepresentation of the Hanoi board"""
+
         def board_as_array(board: Tower, number: int) -> list[str]:
             return [
                 board.get_width() * "="
@@ -133,13 +150,15 @@ class Hanoi:
         def add_board_arrays(array: list[str], other: list[str]):
             # i can safely assume they are the same length
             for i in range(len(array)):
-                array[i] += other[i]
+                array[i] += (" " * gaps) + other[i]
 
+        gaps = 5
         buff = []
         for i in range(len(self._game)):
             if len(buff) == 0:
                 buff += board_as_array(self._game[i], i)
-            add_board_arrays(buff, board_as_array(self._game[i], i))
+            else:
+                add_board_arrays(buff, board_as_array(self._game[i], i))
 
         string: str = ""
         for line in buff:
@@ -147,6 +166,7 @@ class Hanoi:
         return string
 
     def is_complete(self) -> bool:
+        """returns true if the entire stack in the target tower is full"""
         return False
 
     def towers(self) -> None:
