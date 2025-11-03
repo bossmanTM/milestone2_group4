@@ -1,4 +1,3 @@
-from _typeshed import Self
 from stack import Stack
 
 
@@ -31,29 +30,62 @@ def game_loop():
 
 
 class Tower:
+    """## a class representing a tower from the game Hanoi.
+    a tower must only be accessed from the top, \\
+    and you cannot have a larger item on top of a smaller one
+    """
+
     def __init__(self, rings, width):
+        """ initializes a tower with a given width and any rings you decide to add \\
+        args:
+             -- rings = the number of rings to add to the tower \\
+             -- width = the width of the tower
+        """
         if not isinstance(rings, int):
             return
         if not isinstance(width, int):
             return
 
         self._stack = Stack()
-        self._width = width
         for i in range(rings):
-            self._stack.push(rings - i)
+            self.push(i + 1)
+        self._width = width
 
-    def push(self, item) -> None:
+    def push(self, item) -> bool:
+        """add a ring to the tower\\
+        args:
+            -- item = an int representing the ring being added to the tower\\
+        returns:
+            -- True if successful\\
+        """
         if not isinstance(item, int):
-            return
-        if item > self._width:
-            self._stack.push(item)
-        elif item > 0:
-            self._stack.push(item)
+            return False
+        top = self._stack.top()
+        if top == None or top < item:
+            return False
+        if not self.get_width() > item > 0:
+            return False
+
+        self._stack.push(item)
+        return True
 
     def pop(self):
+        """removes a ring from the tower"""
         return self._stack.pop()
 
     def __str__(self) -> str:
+        """returns a string representation of the tower\\
+        example:
+        .. code-block::
+        ***|***
+         **|**
+          *|*
+        .. code-block::
+          *|*
+           |
+           |
+        """
+
         def ring(width: int, size: int) -> str:
             return (
                 (width - size) * " "
@@ -65,8 +97,12 @@ class Tower:
 
         string = ""
         lst: list[int] = self._stack.get_lst()
-        for item in lst:
-            string += ring(len(lst), item) + "\n"
+        width = self.get_width()
+        for i in range(width):
+            if i < len(lst):
+                string += ring(width, lst[-(i + 1)]) + "\n"
+            else:
+                string += ring(width, 0) + "\n"
         return string
 
     def get_width(self) -> int:
