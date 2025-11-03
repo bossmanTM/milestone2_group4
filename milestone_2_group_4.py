@@ -1,3 +1,4 @@
+from _typeshed import Self
 from stack import Stack
 
 
@@ -24,16 +25,41 @@ def game_loop():
     pass
 
 
-class Tower(Stack):
-    pass
+class Tower:
+    def __init__(self):
+        self._stack = Stack()
+
+    def __str__(self) -> str:
+        def ring(width: int, size: int) -> str:
+            return (
+                (width - size) * " "
+                + size * " "
+                + "|"
+                + size * " "
+                + (width - size) * " "
+            )
+
+        string = ""
+        lst: list[int] = self._stack.get_lst()
+        for item in lst:
+            string += ring(len(lst), item) + "\n"
+        return string
 
 
-class Hanoi(Tower):
+class Hanoi:
+    def __init__(self, games: int):
+        self._game:list[Tower] = []
+
+        for i in range(games):
+            self._game += [Tower()]
+
     def transfer(self, from_: int, to: int) -> None:
         pass
 
     def __str__(self) -> str:
-        return f""
+        for tower in self._game:
+
+
 
     def is_complete(self) -> bool:
         return False
