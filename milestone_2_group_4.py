@@ -48,11 +48,10 @@ class Tower:
             return
         if not isinstance(width, int):
             return
-
+        self._width = width
         self._stack = Stack()
         for i in range(rings):
             self.push(i + 1)
-        self._width = width
 
     def push(self, item) -> bool:
         """add a ring to the tower\\
