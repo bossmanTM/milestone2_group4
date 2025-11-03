@@ -45,10 +45,13 @@ class Tower:
             string += ring(len(lst), item) + "\n"
         return string
 
+    def get_width(self) -> int:
+        return 4
+
 
 class Hanoi:
     def __init__(self, games: int):
-        self._game:list[Tower] = []
+        self._game: list[Tower] = []
 
         for i in range(games):
             self._game += [Tower()]
@@ -57,9 +60,28 @@ class Hanoi:
         pass
 
     def __str__(self) -> str:
-        for tower in self._game:
+        def board_as_array(board: Tower, number: int) -> list[str]:
+            return [
+                board.get_width() * "="
+                + str(number)
+                + board.get_width() * "="  # ===== | =====
+            ] + str(board).split("\n")
 
+        def add_board_arrays(array: list[str], other: list[str]):
+            # i can safely assume they are the same length
+            for i in range(len(array)):
+                array[i] += other[i]
 
+        buff = []
+        for i in range(len(self._game)):
+            if len(buff) == 0:
+                buff += board_as_array(self._game[i], i)
+            add_board_arrays(buff, board_as_array(self._game[i], i))
+
+        string: str = ""
+        for line in buff:
+            string += line + "\n"
+        return string
 
     def is_complete(self) -> bool:
         return False
