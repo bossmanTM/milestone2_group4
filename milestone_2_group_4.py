@@ -3,18 +3,21 @@ from stack import Stack
 
 
 def main():
-    option = None
+    option = ''
     print("WELCOME TO HANOI TOWERS GAME!")
-    while option.isdigit() != True and option not in [1, 2]:
-        option = input("Enter 1 to Start a new game and 2 to Resume a saved game: ")
+    while verify_option(option, 1, 2) == False:
+        option = input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ")
     if option == 1:
         new_game()
     else:
         existing_game()
 
-
-def new_game():
-    disks, target, towers = None, None, None
+def verify_option(value:int, minimum:int, maximum:int):
+    if value.isdigit() != True:
+        return False
+    elif minimum > int(value) or maximum < int(value):
+        return False
+    return True
 
 
 def existing_game():
