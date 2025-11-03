@@ -44,10 +44,10 @@ class Tower:
              -- rings = the number of rings to add to the tower \\
              -- width = the width of the tower
         """
-        if not isinstance(rings, int):
+        if (not isinstance(rings, int)
+            or not isinstance(width, int)):
             return
-        if not isinstance(width, int):
-            return
+        
         self._width = width
         self._stack = Stack()
         for i in range(rings + 1):
@@ -60,15 +60,15 @@ class Tower:
         returns:
             -- True if successful\\
         """
-        if not isinstance(item, int):
+        if (not isinstance(item, int) 
+            or not self.get_width() >= item > 0):
             return False
+            
         if not self._stack.is_empty():
             # needed because stack.top will print if its empty
             top = self._stack.top()
             if top != None and top < item:
                 return False
-        if not self.get_width() >= item > 0:
-            return False
 
         self._stack.push(item)
         return True
@@ -109,24 +109,27 @@ class Tower:
                 string += ring(width, 0) + "\n"
         return string
 
+    def top(self):
+        return self._stack.top()
+
     def get_width(self) -> int:
         return self._width
 
 
 class Hanoi:
-    def __init__(self, towers, disks, target):
+    def __init__(self, towers, disks, target) -> None:
         """defines a Hanoi board
         towers = the amount of towers in the board
         disks = the number of disks in the first tower
         target = the tower you are trying to get all the disks to
         """
-        if not isinstance(towers, int):
-            return
-        if not isinstance(disks, int):
-            return
-        if not isinstance(target, int):
+        if (not isinstance(towers, int)
+            or not isinstance(disks, int)
+            or not isinstance(target, int)
+            or not towers >= target >= 0):
             return
 
+        self._target = target
         self._game: list[Tower] = [Tower(disks, disks)]
         for i in range(towers - 1):
             self._game += [Tower(0, disks)]
@@ -135,19 +138,28 @@ class Hanoi:
         """transfers one disc from a start board to an end
         returns True if it succeeds
         """
-        return False
+        disc = self._game[start].top()
+        target = self._game[end].top()
+        if (not 0 < start < len(self._game)
+            or not 0 < end < len(self._game)
+            or disc == None
+            or target == None
+            or not disc < target):
+            return False
+        self._game[end].push(self._game[start].pop())
+        return True
 
     def __str__(self) -> str:
         """string prepresentation of the Hanoi board"""
 
-        def board_as_array(board: Tower, number: int) -> list[str]:
+        def board_as_array(board, number) -> list[str]:
             return [
                 board.get_width() * "="
                 + str(number)
                 + board.get_width() * "="  # ===== | =====
             ] + str(board).split("\n")
 
-        def add_board_arrays(array: list[str], other: list[str]):
+        def add_board_arrays(array, other):
             # i can safely assume they are the same length
             for i in range(len(array)):
                 array[i] += (" " * gaps) + other[i]
