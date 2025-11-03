@@ -52,9 +52,9 @@ class Tower:
         def ring(width: int, size: int) -> str:
             return (
                 (width - size) * " "
-                + size * " "
+                + size * "*"
                 + "|"
-                + size * " "
+                + size * "*"
                 + (width - size) * " "
             )
 
