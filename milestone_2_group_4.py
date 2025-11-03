@@ -15,7 +15,8 @@ def main():
 def verify_option(value:int, minimum:int, maximum:int):
     if value.isdigit() != True:
         return False
-    elif minimum > int(value) or maximum < int(value):
+    value = int(value)
+    elif minimum > value or maximum < value:
         return False
     return True
 
