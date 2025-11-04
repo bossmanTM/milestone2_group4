@@ -189,4 +189,3 @@ class Hanoi:
     def is_complete(self) -> bool:
         """returns true if the entire stack in the target tower is full"""
         return self._game[self._target] == self._disks
-        return False
