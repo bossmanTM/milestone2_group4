@@ -133,6 +133,7 @@ class Hanoi:
             return
 
         self._target = target
+        self._disks = disks
         self._game: list[Tower] = [Tower(disks, disks)]
         for i in range(towers - 1):
             self._game += [Tower(0, disks)]
@@ -187,8 +188,5 @@ class Hanoi:
 
     def is_complete(self) -> bool:
         """returns true if the entire stack in the target tower is full"""
+        return self._game[self._target] == self._disks
         return False
-
-    def towers(self) -> None:
-        """prints the towers in the game window"""
-        pass
