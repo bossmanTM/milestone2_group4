@@ -154,7 +154,7 @@ class Hanoi:
             or not towers >= target >= 0):
             return
 
-        self._target = target
+        self._target = target-1
         self._disks = disks
         self._game: list[Tower] = [Tower(disks, disks)]
         for i in range(towers - 1):
@@ -165,8 +165,8 @@ class Hanoi:
         returns True if it succeeds
         """
         
-        if (not 0 < start < len(self._game)
-            or not 0 < end < len(self._game)):
+        if (not 0 < start <= len(self._game)
+            or not 0 < end <= len(self._game)):
             return False
             
         end -= 1
@@ -175,7 +175,7 @@ class Hanoi:
         
         if  (not self._game[end].is_empty()
             and not disc == None
-            and disc < self._game[end].top()):
+            and not disc < self._game[end].top()):
             return False
         self._game[end].push(self._game[start].pop())
         return True
@@ -199,9 +199,9 @@ class Hanoi:
         buff = []
         for i in range(len(self._game)):
             if len(buff) == 0:
-                buff += board_as_array(self._game[i], i)
+                buff += board_as_array(self._game[i], i+1)
             else:
-                add_board_arrays(buff, board_as_array(self._game[i], i))
+                add_board_arrays(buff, board_as_array(self._game[i], i+1))
 
         string: str = ""
         for line in buff:
