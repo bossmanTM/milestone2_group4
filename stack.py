@@ -24,7 +24,7 @@ class Stack:
     
     def top(self):
         if len(self._stack_lst) != 0:
-            return self._stack_lst[0]
+            return self._stack_lst[-1]
         else:
             print('The stack is empty')
             return None
