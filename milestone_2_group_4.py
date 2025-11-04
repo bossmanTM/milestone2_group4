@@ -6,14 +6,16 @@ def main():
     print("WELCOME TO HANOI TOWERS GAME!")
     while verify_option(option, 1, 2) == False:
         option = input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ")
-    if option == 1:
+    if option == "1":
+        print("Starting a new game ............")
         new_game()
     else:
+        print("Enter file name (e.g.: game.p): ")
         existing_game()
 
 
 def verify_option(value: int, minimum: int, maximum: int):
-    if value.isdigit() != True:
+    if value.isdigit() == False:
         return False
     elif minimum > int(value) or maximum < int(value):
         return False
@@ -21,6 +23,17 @@ def verify_option(value: int, minimum: int, maximum: int):
 
 
 def new_game():
+    disks, target, towers = '', '', ''
+    while verify_option(towers, 3, 9) == False:
+        towers = input("Number of towers [min=3,..,max=9]?")
+    while verify_option(disks, 3, 9) == False:
+        disks = input("Number of disks [min=3,..,max=9]?")
+    while verify_option(target, 2, 4) == False:
+        target = input("Target Tower [min=2,..,max=4]?")
+    game_loop(disks, target, towers)
+            
+    
+def existing_game():
     pass
 
 
