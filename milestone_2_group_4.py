@@ -41,8 +41,14 @@ def existing_game():
     pass
 
 
-def game_loop():
-    pass
+def game_loop(disks, target, towers):
+    option = ""
+    while option != "3":
+        print("\n", Hanoi(5, 5), end = "")
+        while verify_option(option, 1, 3) == False:
+            print("1 - Move a Disk\n2- Save and End\n3- End without Saving\n")
+            option = input("Enter 1 or 2 or 3: ")
+            print()
 
 
 class Tower:
