@@ -44,13 +44,13 @@ class Tower:
              -- rings = the number of rings to add to the tower \\
              -- width = the width of the tower
         """
-        if not isinstance(rings, int):
+        if (not isinstance(rings, int)
+            or not isinstance(width, int)):
             return
-        if not isinstance(width, int):
-            return
+        
         self._width = width
         self._stack = Stack()
-        for i in range(rings):
+        for i in range(rings + 1):
             self.push(rings - i)
 
     def push(self, item) -> bool:
@@ -60,15 +60,15 @@ class Tower:
         returns:
             -- True if successful\\
         """
-        if not isinstance(item, int):
+        if (not isinstance(item, int) 
+            or not self.get_width() >= item > 0):
             return False
+            
         if not self._stack.is_empty():
             # needed because stack.top will print if its empty
             top = self._stack.top()
             if top != None and top < item:
                 return False
-        if not self.get_width() > item > 0:
-            return False
 
         self._stack.push(item)
         return True
@@ -109,37 +109,77 @@ class Tower:
                 string += ring(width, 0) + "\n"
         return string
 
+    def is_empty(self):
+        return self._stack.is_empty()
+
+    def top(self):
+        return self._stack.top()
+
     def get_width(self) -> int:
         return self._width
 
 
 class Hanoi:
-    def __init__(self, games: int, rings):
-        self._game: list[Tower] = [Tower(rings, rings)]
-        for i in range(games - 2):
-            self._game += [Tower(0, rings)]
+    def __init__(self, towers, disks, target) -> None:
+        """defines a Hanoi board
+        towers = the amount of towers in the board
+        disks = the number of disks in the first tower
+        target = the tower you are trying to get all the disks to
+        """
+        if (not isinstance(towers, int)
+            or not isinstance(disks, int)
+            or not isinstance(target, int)
+            or not towers >= target >= 0):
+            return
 
-    def transfer(self, from_: int, to: int) -> None:
-        pass
+        self._target = target
+        self._disks = disks
+        self._game: list[Tower] = [Tower(disks, disks)]
+        for i in range(towers - 1):
+            self._game += [Tower(0, disks)]
+
+    def transfer(self, start: int, end: int) -> bool:
+        """transfers one disc from a start board to an end
+        returns True if it succeeds
+        """
+        
+        if (not 0 < start < len(self._game)
+            or not 0 < end < len(self._game)):
+            return False
+            
+        end -= 1
+        start -= 1
+        disc = self._game[start].top()
+        
+        if  (not self._game[end].is_empty()
+            and not disc == None
+            and disc < self._game[end].top()):
+            return False
+        self._game[end].push(self._game[start].pop())
+        return True
 
     def __str__(self) -> str:
-        def board_as_array(board: Tower, number: int) -> list[str]:
+        """string prepresentation of the Hanoi board"""
+
+        def board_as_array(board, number) -> list[str]:
             return [
                 board.get_width() * "="
                 + str(number)
                 + board.get_width() * "="  # ===== | =====
             ] + str(board).split("\n")
 
-        def add_board_arrays(array: list[str], other: list[str]):
+        def add_board_arrays(array, other):
             # i can safely assume they are the same length
             for i in range(len(array)):
-                array[i] += other[i]
+                array[i] += (" " * gaps) + other[i]
 
+        gaps = 5
         buff = []
         for i in range(len(self._game)):
             if len(buff) == 0:
                 buff += board_as_array(self._game[i], i)
-            add_board_arrays(buff, board_as_array(self._game[i], i))
+            else:
+                add_board_arrays(buff, board_as_array(self._game[i], i))
 
         string: str = ""
         for line in buff:
@@ -147,8 +187,6 @@ class Hanoi:
         return string
 
     def is_complete(self) -> bool:
+        """returns true if the entire stack in the target tower is full"""
+        return self._game[self._target] == self._disks
         return False
-
-    def towers(self) -> None:
-        """prints the towers in the game window"""
-        pass
