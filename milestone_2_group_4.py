@@ -69,7 +69,7 @@ class Tower:
         
         self._width = width
         self._stack = Stack()
-        for i in range(rings + 1):
+        for i in range(rings):
             self.push(rings - i)
 
     def push(self, item) -> bool:
