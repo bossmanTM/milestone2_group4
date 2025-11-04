@@ -109,6 +109,9 @@ class Tower:
                 string += ring(width, 0) + "\n"
         return string
 
+    def is_empty(self):
+        return self._stack.is_empty()
+
     def top(self):
         return self._stack.top()
 
@@ -138,13 +141,18 @@ class Hanoi:
         """transfers one disc from a start board to an end
         returns True if it succeeds
         """
-        disc = self._game[start].top()
-        target = self._game[end].top()
+        
         if (not 0 < start < len(self._game)
-            or not 0 < end < len(self._game)
-            or disc == None
-            or target == None
-            or not disc < target):
+            or not 0 < end < len(self._game)):
+            return False
+            
+        end -= 1
+        start -= 1
+        disc = self._game[start].top()
+        
+        if  (not self._game[end].is_empty()
+            and not disc == None
+            and disc < self._game[end].top()):
             return False
         self._game[end].push(self._game[start].pop())
         return True
