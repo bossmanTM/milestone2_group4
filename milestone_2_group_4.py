@@ -52,16 +52,16 @@ def game_loop(disks, target, towers):
 
 
 class Tower:
-    """## a class representing a tower from the game Hanoi.
-    a tower must only be accessed from the top, \\
+    """a class representing a tower from the game Hanoi. \n
+    a tower must only be accessed from the top
     and you cannot have a larger item on top of a smaller one
     """
 
     def __init__(self, rings, width):
-        """ initializes a tower with a given width and any rings you decide to add \\
+        """ initializes a tower with a given width and any rings you decide to add \n
         args:
-             -- rings = the number of rings to add to the tower \\
-             -- width = the width of the tower
+             -- rings = the number of rings to add to the tower \n
+             -- width = the width of the tower \n
         """
         if (not isinstance(rings, int)
             or not isinstance(width, int)):
@@ -73,11 +73,11 @@ class Tower:
             self.push(rings - i)
 
     def push(self, item) -> bool:
-        """add a ring to the tower\\
+        """add a ring to the tower \n
         args:
-            -- item = an int representing the ring being added to the tower\\
+            -- item = an int representing the ring being added to the tower
         returns:
-            -- True if successful\\
+            -- True if successful
         """
         if (not isinstance(item, int) 
             or not self.get_width() >= item > 0):
@@ -97,7 +97,7 @@ class Tower:
         return self._stack.pop()
 
     def __str__(self) -> str:
-        """returns a string representation of the tower\\
+        """returns a string representation of the tower\n
         example:
         .. code-block::
         ***|***
@@ -143,10 +143,10 @@ class Tower:
 
 class Hanoi:
     def __init__(self, towers, disks, target) -> None:
-        """defines a Hanoi board
-        towers = the amount of towers in the board
-        disks = the number of disks in the first tower
-        target = the tower you are trying to get all the disks to
+        """defines a Hanoi board\n
+         -- towers = the amount of towers in the board  \n
+         -- disks = the number of disks in the first tower \n 
+         -- target = the tower you are trying to get all the disks to   \n 
         """
         if (not isinstance(towers, int)
             or not isinstance(disks, int)
