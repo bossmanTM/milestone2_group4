@@ -19,4 +19,5 @@ class Hanoi:
             string += "\n"
         return string
 
-print(Hanoi(3, 3, 3))
+
+print(Hanoi(3, 3, 3)) #Test
