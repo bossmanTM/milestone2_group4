@@ -110,13 +110,7 @@ class Tower:
         """
 
         def ring(width: int, size: int) -> str:
-            return (
-                (width - size) * " "
-                + size * "*"
-                + "|"
-                + size * "*"
-                + (width - size) * " "
-            )
+            return f"{(width - size) * ' '}{size * '*'}|{size * '*'}{(width - size) * ' '}"    
 
         string = ""
         lst: list[int] = self._stack.get_lst()
