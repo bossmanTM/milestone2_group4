@@ -1,55 +1,5 @@
 from stack import Stack
-
-
-def main():
-    option = ""
-    print("WELCOME TO HANOI TOWERS GAME!")
-    while verify_option(option, 1, 2) == False:
-        option = input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ")
-    if option == "1":
-        print("Starting a new game ............")
-        new_game()
-    else:
-        print("Enter file name (e.g.: game.p): ")
-        existing_game()
-
-
-def verify_option(value: int, minimum: int, maximum: int):
-    if value.isdigit() == False:
-        return False
-    elif minimum > int(value) or maximum < int(value):
-        return False
-    return True
-
-
-def new_game():
-    disks, target, towers = '', '', ''
-    while verify_option(towers, 3, 9) == False:
-        towers = input("Number of towers [min=3,..,max=9]?")
-    while verify_option(disks, 3, 9) == False:
-        disks = input("Number of disks [min=3,..,max=9]?")
-    while verify_option(target, 2, 4) == False:
-        target = input("Target Tower [min=2,..,max=4]?")
-    game_loop(disks, target, towers)
-            
-    
-def existing_game():
-    pass
-
-
-def existing_game():
-    pass
-
-
-def game_loop(disks, target, towers):
-    option = ""
-    while option != "3":
-        print("\n", Hanoi(5, 5), end = "")
-        while verify_option(option, 1, 3) == False:
-            print("1 - Move a Disk\n2- Save and End\n3- End without Saving\n")
-            option = input("Enter 1 or 2 or 3: ")
-            print()
-
+import pickle
 
 class Tower:
     """a class representing a tower from the game Hanoi. \n
@@ -137,7 +87,6 @@ class Tower:
     def get_width(self) -> int:
         return self._width
 
-
 class Hanoi:
     def __init__(self, towers, disks, target) -> None:
         """defines a Hanoi board\n
@@ -181,11 +130,9 @@ class Hanoi:
         """string prepresentation of the Hanoi board"""
 
         def board_as_array(board, number) -> list[str]:
-            return [
-                board.get_width() * "="
-                + str(number)
-                + board.get_width() * "="  # ===== | =====
-            ] + str(board).split("\n")
+            title_bar = board.get_width() * "="
+            title = title_bar + str(number) + title_bar
+            return [title] + str(board).split("\n")
 
         def add_board_arrays(array, other):
             # i can safely assume they are the same length
@@ -204,7 +151,90 @@ class Hanoi:
         for line in buff:
             string += line + "\n"
         return string
+    
+    def __len__(self) -> int:
+        return len(self._game)
 
     def is_complete(self) -> bool:
         """returns true if the entire stack in the target tower is full"""
         return len(self._game[self._target]) == self._disks
+
+
+def main():
+    option = ""
+    print("WELCOME TO HANOI TOWERS GAME!")
+    while not verify_option(option, 1, 2):
+        option = input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ")
+    if option == "1":
+        print("Starting a new game ............")
+        new_game()
+    else:
+        filename = input("Enter file name (e.g.: game.p): ")
+        existing_game(filename)
+
+def get_ranged_input(str, min, max):
+    input_str = ""
+    while verify_option(input_str, min, max) == False:
+        input_str = input(str)
+    return int(input_str)
+
+def verify_option(value, minimum: int, maximum: int):
+    if value.is_integer() == False:
+        return False
+    elif minimum > int(value) or maximum < int(value):
+        return False
+    return True
+
+
+def new_game():
+    towers = get_ranged_input("Number of towers [min=3,..,max=9]?", 3, 9)
+    disks = get_ranged_input("Number of disks [min=3,..,max=9]?", 3, 9)
+    target = get_ranged_input("Target Tower [min=2,..,max=4]?", 2, 4)
+    
+    game = Hanoi(towers, disks, target)
+    game_loop(game)
+            
+    
+def existing_game(filename):
+    pass
+
+def game_loop(game:Hanoi):
+    running = True
+    def move_a_disk() -> bool:
+        source_tower = get_ranged_input("Source Tower? ", 1, len(game)-1)
+        destination_tower = get_ranged_input("Source Tower? ", 1, len(game)-1)
+        if not game.transfer(source_tower, destination_tower):
+            print("transfer failed, please try again")
+            return False
+        return True
+    def save():
+        filename = input("please enter a name for your savefile")
+        try:
+            with open(filename, "wb") as f:
+                pickle.dump(game, f)
+        except:
+            print("failed to open file for saving")
+            return False
+        return True
+    def exit():
+        print("Ending Game . . .")
+        print("Goodbye!")
+    option = ""
+    while running:
+        print("\n", game, end = "")
+        option = get_ranged_input(" 1 - Move a Disk\n\
+                                    2- Save and End\n\
+                                    3- End without Saving", 1, 3)
+        if option == 1:
+            success = False
+            while not success:
+                success = move_a_disk()
+        elif option == 2:
+            save_success = False 
+            while not save_success:
+                save_success = save()
+            exit()
+            running = False
+        elif option == 3:
+            exit()
+            running = False
