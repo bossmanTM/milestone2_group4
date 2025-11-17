@@ -83,11 +83,12 @@ class Tower:
             or not self.get_width() >= item > 0):
             return False
             
-        if not self._stack.is_empty():
-            # needed because stack.top will print if its empty
-            top = self._stack.top()
-            if top != None and top < item:
-                return False
+        # needed because stack.top will print if its empty            
+        top = self._stack.top()
+        if (not self._stack.is_empty()
+            and top is not None 
+            and top < item):
+            return False
 
         self._stack.push(item)
         return True
@@ -110,7 +111,9 @@ class Tower:
         """
 
         def ring(width: int, size: int) -> str:
-            return f"{(width - size) * ' '}{size * '*'}|{size * '*'}{(width - size) * ' '}"    
+            spacing = (width - size) * ' '
+            solid = size * '*'
+            return f"{spacing}{solid}|{solid}{spacing}"    
 
         string = ""
         lst: list[int] = self._stack.get_lst()
@@ -189,7 +192,7 @@ class Hanoi:
             for i in range(len(array)):
                 array[i] += (" " * gaps) + other[i]
 
-        gaps = 5
+        gaps = 1
         buff = []
         for i in range(len(self._game)):
             if len(buff) == 0:
