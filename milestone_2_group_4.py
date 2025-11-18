@@ -59,6 +59,8 @@ class Tower:
         """
 
         def ring(width: int, size: int) -> str:
+            """returns the string representation of a single ring
+            """
             spacing = (width - size) * ' '
             solid = size * '*'
             return f"{spacing}{solid}|{solid}{spacing}"    
