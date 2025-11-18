@@ -178,17 +178,14 @@ def get_ranged_input(prompt, min, max):
     """prompts the user for an input then checks if its within a target range
     """
     input_str = ""
-    while verify_option(input_str, min, max) == False:
+    while verify_input(input_str, min, max) == False:
         input_str = input(prompt)
     return int(input_str)
 
-def verify_option(value:str, minimum: int, maximum: int):
-    if not value.isdigit():
-        return False
-    elif minimum > int(value) or maximum < int(value):
-        return False
-    return True
-
+def verify_input(value:str, minimum: int, maximum: int):
+    """inclusively verifies your input is a digit within a given range
+    """
+    return value.isdigit() and minimum <= int(value) <= maximum
 
 def new_game():
     towers = get_ranged_input("Number of towers [min=3,..,max=9]? ", 3, 10)
