@@ -52,7 +52,7 @@ class Tower:
         ***|***
          **|**
           *|*
-        .. code-block::
+          
           *|*
            |
            |
