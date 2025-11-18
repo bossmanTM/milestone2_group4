@@ -151,6 +151,8 @@ class Hanoi:
         return string
     
     def __len__(self) -> int:
+        """returns the amount of towers in the game board
+        """
         return len(self._game)
 
     def is_complete(self) -> bool:
