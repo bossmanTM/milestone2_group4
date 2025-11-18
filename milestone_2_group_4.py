@@ -191,7 +191,7 @@ def verify_option(value:str, minimum: int, maximum: int):
 def new_game():
     towers = get_ranged_input("Number of towers [min=3,..,max=9]? ", 3, 10)
     disks = get_ranged_input("Number of disks [min=3,..,max=9]? ", 3, 10)
-    target = get_ranged_input(f"Target Tower [min=1,..,max={towers}]? ", 1, towers+1)
+    target = get_ranged_input(f"Target Tower [min=2,..,max={towers}]? ", 2, towers+1)
     
     game = Hanoi(towers, disks, target)
     game_loop(game)
