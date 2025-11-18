@@ -174,10 +174,12 @@ def main():
         game_loop(game)
         
 
-def get_ranged_input(str, min, max):
+def get_ranged_input(prompt, min, max):
+    """prompts the user for an input then checks if its within a target range
+    """
     input_str = ""
     while verify_option(input_str, min, max) == False:
-        input_str = input(str)
+        input_str = input(prompt)
     return int(input_str)
 
 def verify_option(value:str, minimum: int, maximum: int):
@@ -198,11 +200,11 @@ def new_game():
             
     
 def existing_game(filename):
-    game: None | Hanoi = None
+    game = None
     try:
         with open(filename, "rb") as f:
             game = pickle.load(f)
-    except:
+    except OSError:
         print("failed to open file")
     return game
     
@@ -221,7 +223,7 @@ def game_loop(game:Hanoi):
         try:
             with open(filename, "wb") as f:
                 pickle.dump(game, f)
-        except:
+        except OSError:
             print("failed to open file for saving")
             return False
         return True
