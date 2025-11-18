@@ -9,9 +9,11 @@ class Tower:
 
     def __init__(self, rings, width):
         """ initializes a tower with a given width and any rings you decide to add \n
-        args:
+        parameters:
              -- rings = the number of rings to add to the tower \n
              -- width = the width of the tower \n
+        returns:
+            a Tower object
         """
         if (not isinstance(rings, int)
             or not isinstance(width, int)):
@@ -42,11 +44,18 @@ class Tower:
         return True
 
     def pop(self):
-        """removes a ring from the tower"""
+        """removes a ring from the tower
+        parameters: 
+            -- self: a Tower object
+        returns: the int that was at the top of the tower
+        """
         return self._stack.pop()
 
     def __str__(self) -> str:
-        """returns a string representation of the tower\n
+        """returns a string representation of the tower
+        parameters: 
+            -- self: a Tower object
+        returns: a string representation of the Tower
         example:
         .. code-block::
         ***|***
@@ -61,6 +70,9 @@ class Tower:
         def ring(width: int, size: int) -> str:
             """returns the string representation of a single ring
             (this could be handled if ring was a class and this was __str__ but that is unneeded for the scale of this project)
+            parameters: 
+                -- width: the maximum size of the ring
+                -- size: the size of the ring
             """
             spacing = (width - size) * ' '
             solid = size * '*'
@@ -78,21 +90,33 @@ class Tower:
     
     def __len__(self):
         """returns the amount of rings in the tower
+        parameters: 
+            -- self: a Tower object
+        returns: the length of the tower
         """
         return len(self._stack)
 
     def is_empty(self):
         """returns true if the tower has nothing in it
+        parameters: 
+            -- self: a Tower object
+        returns: true if empty
         """
         return self._stack.is_empty()
 
     def top(self):
         """returns the top element in the stack (will print if stack is empty)
+        parameters: 
+            -- self: a Tower object
+        returns: the top element of the tower
         """
         return self._stack.top()
 
     def get_width(self) -> int:
         """returns the width of the tower
+        parameters: 
+            -- self: a Tower object
+        returns: the width of the tower
         """
         return self._width
 
@@ -102,6 +126,9 @@ class Hanoi:
          -- towers = the amount of towers in the board  \n
          -- disks = the number of disks in the first tower \n 
          -- target = the tower you are trying to get all the disks to   \n 
+        parameters: 
+             -- self: a Tower object
+        returns: a Hanoi Object
         """
         if (not isinstance(towers, int)
             or not isinstance(disks, int)
@@ -118,6 +145,9 @@ class Hanoi:
     def transfer(self, start: int, end: int) -> bool:
         """transfers one disc from a start board to an end
         returns True if it succeeds
+        parameters: 
+            -- self: a Tower object
+        returns: true if successful
         """
         
         if (not 0 < start <= len(self._game)
@@ -136,14 +166,30 @@ class Hanoi:
         return True
 
     def __str__(self) -> str:
-        """string prepresentation of the Hanoi board"""
+        """string prepresentation of the Hanoi board
+        parameters: 
+            -- self: a Tower object
+        returns: a string representation of the object
+        """
 
         def board_as_array(board, number) -> list[str]:
+            """converts a board to string array and adds a titlebar
+            parameters: 
+                -- board: a Tower object
+                -- number: the number of the titlebar
+            returns: a list of strings representing each line of the board
+            """
             title_bar = board.get_width() * "="
             title = title_bar + str(number) + title_bar
             return [title] + str(board).split("\n")
 
         def add_board_arrays(array, other):
+            """adds two board arrays together in a zip
+            parameters:
+                array: the left hand array
+                other: the other array
+            returns: both of the arrays connected line by line
+            """
             # i can safely assume they are the same length
             for i in range(len(array)):
                 array[i] += (" " * gaps) + other[i]
@@ -163,11 +209,18 @@ class Hanoi:
     
     def __len__(self) -> int:
         """returns the amount of towers in the game board
+        parameters: 
+            -- self: a Tower object
+        returns: the length of the tower
         """
         return len(self._game)
 
     def is_complete(self) -> bool:
-        """returns true if the entire stack in the target tower is full"""
+        """returns true if the entire stack in the target tower is full
+        parameters: 
+            -- self: a Tower object
+        returns: true if complete
+        """
         return len(self._game[self._target]) == self._disks
 
 
