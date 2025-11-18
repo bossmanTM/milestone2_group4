@@ -173,8 +173,7 @@ class Hanoi:
 def main():
     option = ""
     print("WELCOME TO HANOI TOWERS GAME!")
-    while not verify_option(option, 1, 2):
-        option = input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ")
+    option = get_ranged_input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ", 1, 2)
     if option == "1":
         print("Starting a new game ............")
         new_game()
