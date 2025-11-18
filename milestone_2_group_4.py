@@ -74,15 +74,23 @@ class Tower:
         return string
     
     def __len__(self):
+        """returns the amount of rings in the tower
+        """
         return len(self._stack)
 
     def is_empty(self):
+        """returns true if the tower has nothing in it
+        """
         return self._stack.is_empty()
 
     def top(self):
+        """returns the top element in the stack (will print if stack is empty)
+        """
         return self._stack.top()
 
     def get_width(self) -> int:
+        """returns the width of the tower
+        """
         return self._width
 
 class Hanoi:
