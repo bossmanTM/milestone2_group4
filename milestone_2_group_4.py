@@ -238,7 +238,6 @@ def game_loop(game:Hanoi):
         print("Ending Game . . .")
         print("Goodbye!")
         
-    option = ""
     steps = 0
     while running:
         print(game)
