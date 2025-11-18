@@ -60,6 +60,7 @@ class Tower:
 
         def ring(width: int, size: int) -> str:
             """returns the string representation of a single ring
+            (this could be handled if ring was a class and this was __str__ but that is unneeded for the scale of this project)
             """
             spacing = (width - size) * ' '
             solid = size * '*'
