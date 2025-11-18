@@ -215,6 +215,7 @@ def existing_game(filename):
 
 def game_loop(game:Hanoi):
     running = True
+    
     def move_a_disk() -> bool:
         source_tower = get_ranged_input("Source Tower? ", 1, len(game))
         destination_tower = get_ranged_input("Destination Tower? ", 1, len(game))
@@ -222,6 +223,7 @@ def game_loop(game:Hanoi):
             print("transfer failed, please try again")
             return False
         return True
+        
     def save():
         filename = input("please enter a name for your savefile: ")
         try:
@@ -231,9 +233,11 @@ def game_loop(game:Hanoi):
             print("failed to open file for saving")
             return False
         return True
+        
     def exit():
         print("Ending Game . . .")
         print("Goodbye!")
+        
     option = ""
     steps = 0
     while running:
