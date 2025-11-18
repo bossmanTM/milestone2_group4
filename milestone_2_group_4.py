@@ -188,6 +188,8 @@ def verify_input(value:str, minimum: int, maximum: int):
     return value.isdigit() and minimum <= int(value) <= maximum
 
 def new_game():
+    """starts a new Hanoi game and prompts the user for the details of the game
+    """
     towers = get_ranged_input("Number of towers [min=3,..,max=9]? ", 3, 10)
     disks = get_ranged_input("Number of disks [min=3,..,max=9]? ", 3, 10)
     target = get_ranged_input(f"Target Tower [min=2,..,max={towers}]? ", 2, towers+1)
@@ -197,12 +199,17 @@ def new_game():
             
     
 def existing_game(filename):
+    """loads a pickled game from the filesystem, if the game does not exist it creates a new one
+    """
     game = None
     try:
         with open(filename, "rb") as f:
             game = pickle.load(f)
     except OSError:
         print("failed to open file")
+    if not isinstance(game, Hanoi):
+        print("file does not contain a game object, starting a new one")
+        new_game()
     return game
     
 
