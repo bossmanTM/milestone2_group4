@@ -254,12 +254,14 @@ def game_loop(game:Hanoi):
             if game.is_complete():
                 print(f"Good job, Transfer achieved in {steps} steps")
                 return
+                
         elif option == 2:
             save_success = False 
             while not save_success:
                 save_success = save()
             exit()
             running = False
+            
         elif option == 3:
             exit()
             running = False
