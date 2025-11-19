@@ -56,6 +56,17 @@ class Tower:
         """
         return self._stack.pop()
 
+    def ring(self, width: int, size: int) -> str: # i would really like this to be declared in __str__
+        """returns the string representation of a single ring
+            (this could be handled if ring was a class and this was __str__ but that is unneeded for the scale of this project)
+            parameters: 
+            -- width: the maximum size of the ring
+            -- size: the size of the ring
+        """
+        spacing = (width - size) * ' '
+        solid = size * '*'
+        return f"{spacing}{solid}|{solid}{spacing}"
+
     def __str__(self) -> str:
         """returns a string representation of the tower
         parameters: 
@@ -70,27 +81,16 @@ class Tower:
           *|*
            |
            |
-        """
-
-        def ring(width: int, size: int) -> str:
-            """returns the string representation of a single ring
-            (this could be handled if ring was a class and this was __str__ but that is unneeded for the scale of this project)
-            parameters: 
-                -- width: the maximum size of the ring
-                -- size: the size of the ring
-            """
-            spacing = (width - size) * ' '
-            solid = size * '*'
-            return f"{spacing}{solid}|{solid}{spacing}"    
+        """    
 
         string = ""
         lst: list[int] = self._stack.get_lst()
         width = self.get_width()
         for i in range(width):
             if i < len(lst):
-                string += ring(width, lst[i]) + "\n"
+                string += self.ring(width, lst[i]) + "\n"
             else:
-                string += ring(width, 0) + "\n"
+                string += self.ring(width, 0) + "\n"
         return string
     
     def __len__(self):
@@ -282,36 +282,28 @@ def existing_game(filename):
         new_game(0)
     return game
     
+def move_a_disk(game) -> bool:
+    source_tower = get_ranged_input("Source Tower? ", 1, len(game))
+    destination_tower = get_ranged_input("Destination Tower? ", 1, len(game))
+    transfer_result = game.transfer(source_tower, destination_tower)
+    if transfer_result[0]:
+        return True
+    print(transfer_result[1])
+    return False
+
+def save(game, steps: int):
+    filename = input("Enter file name (e.g.: game.p): ")
+    try:
+        with open(filename, "wb") as f:
+            pickle.dump((game, steps), f)
+    except OSError:
+        print("Failed to open file for saving")
+        return False
+    print("Game Saved ......")
+    return True    
 
 def game_loop(game: Hanoi, steps: int):
     running = True
-    
-    def move_a_disk() -> bool:
-        source_tower = get_ranged_input("Source Tower? ", 1, len(game))
-        destination_tower = get_ranged_input("Destination Tower? ", 1, len(game))
-        transfer_result = game.transfer(source_tower, destination_tower)
-        if transfer_result[0]:
-            return True
-        print(transfer_result[1])
-        return False
-        
-    def save(steps: int):
-        filename = input("Enter file name (e.g.: game.p): ")
-        try:
-            with open(filename, "wb") as f:
-                pickle.dump((game, steps), f)
-        except OSError:
-            print("Failed to open file for saving")
-            return False
-        return True
-        
-    def exit(reason: int):
-        if reason == 1:
-            print("Game Saved ......")
-            print("See you later ......!")
-        else:
-            print("Ending Game ......")
-            print("Goodbye!")
         
     while running:
         print(f"\n{game}", end = "")
@@ -320,7 +312,7 @@ def game_loop(game: Hanoi, steps: int):
         print("3 - End without Saving\n")
         option = get_ranged_input("Enter 1, 2, or 3: ", 1, 4)
         if option == 1:
-            success = move_a_disk()
+            success = move_a_disk(game)
             if success:
                 steps += 1
                 if game.is_complete():
@@ -330,11 +322,12 @@ def game_loop(game: Hanoi, steps: int):
         elif option == 2:
             save_success = False 
             while not save_success:
-                save_success = save(steps)
-            exit(1)
+                save_success = save(game, steps)
+            print("See you later ......!")
             running = False
             
         elif option == 3:
-            exit(2)
+            print("Ending Game ......")
+            print("Goodbye!")
             running = False
 main()
