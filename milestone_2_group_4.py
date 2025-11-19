@@ -157,7 +157,7 @@ class Hanoi:
         
         if (not 0 < start <= len(self._game)
             or not 0 < end <= len(self._game)):
-            return (False, "Invalid move. the source tower is empty. Please try again!\n")
+            return (False, "Invalid move. the source tower is empty. Please try again!")
             
         end -= 1
         start -= 1
@@ -166,7 +166,7 @@ class Hanoi:
         if  (not self._game[end].is_empty()
             and not disc == None
             and not disc < self._game[end].top()):
-            return (False, "Invalid move. Can't put bigger disk on a smaller one. Please try again!\n")
+            return (False, "Invalid move. Can't put bigger disk on a smaller one. Please try again!")
         self._game[end].push(self._game[start].pop())
         return (True, "")
 
@@ -241,7 +241,6 @@ def main():
         while game is None:
             filename = input("Enter file name (e.g.: game.p): ")
             game = existing_game(filename)
-        print()
         game_loop(game[0], game[1])
         
 
@@ -266,7 +265,6 @@ def new_game(steps: int):
     towers = get_ranged_input("Number of towers [min=3,..,max=9]? ", 3, 9)
     disks = get_ranged_input("Number of disks [min=3,..,max=9]? ", 3, 9)
     target = get_ranged_input(f"Target Tower [min=2,..,max={towers}]? ", 2, towers+1)
-    print()
     
     game = Hanoi(towers, disks, target)
     game_loop(game, steps)
@@ -279,10 +277,8 @@ def existing_game(filename):
     try:
         with open(filename, "rb") as f:
             game = pickle.load(f)
-    except OSError:
-        print("Failed to open file")
-    if not isinstance(game[0], Hanoi):
-        print("File does not contain a game object, starting a new one")
+    except:
+        print(f"file: {filename} not found: Starting a new game................")
         new_game(0)
     return game
     
@@ -318,7 +314,7 @@ def game_loop(game: Hanoi, steps: int):
             print("Goodbye!")
         
     while running:
-        print(game, end = "")
+        print(f"\n{game}", end = "")
         print("1 - Move a Disk")
         print("2 - Save and End")
         print("3 - End without Saving\n")
