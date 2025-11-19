@@ -154,13 +154,16 @@ class Hanoi:
             -- self: a Tower object
         returns: True if successful
         """
+        print(len(self._game))
+        if ((not 0 < start <= len(self._game))
+            or (not 0 < end <= len(self._game))):
+            return (False, "Invalid move. that is not a tower. Please try again!")
         
-        if (not 0 < start <= len(self._game)
-            or not 0 < end <= len(self._game)):
-            return (False, "Invalid move. the source tower is empty. Please try again!")
-            
         end -= 1
         start -= 1
+        if self._game[start].is_empty():
+            return (False, "Invalid move. the source tower is empty. Please try again!")
+            
         disc = self._game[start].top()
         
         if  (not self._game[end].is_empty()
