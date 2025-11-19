@@ -173,6 +173,27 @@ class Hanoi:
         self._game[end].push(self._game[start].pop())
         return (True, "")
 
+
+    def add_board_arrays(self, gaps, array, other):
+        """
+        purpose:
+        parameters:
+        return:
+        """
+            # i can safely assume they are the same length
+        for i in range(len(array)):
+            array[i] += (" " * gaps) + other[i]
+            
+    def board_as_array(self, board, number) -> list[str]:
+        """
+        purpose:
+        parameters:
+        return:
+        """
+        title_bar = board.get_width() * "="
+        title = title_bar + str(number) + title_bar
+        return [title] + str(board).split("\n")
+        
     def __str__(self) -> str:
         """string prepresentation of the Hanoi board
         parameters: 
@@ -180,35 +201,13 @@ class Hanoi:
         returns: a string representation of the object
         """
 
-        def board_as_array(board, number) -> list[str]:
-            """converts a board to string array and adds a titlebar
-            parameters: 
-                -- board: a Tower object
-                -- number: the number of the titlebar
-            returns: a list of strings representing each line of the board
-            """
-            title_bar = board.get_width() * "="
-            title = title_bar + str(number) + title_bar
-            return [title] + str(board).split("\n")
-
-        def add_board_arrays(array, other):
-            """adds two board arrays together in a zip
-            parameters:
-                array: the left hand array
-                other: the other array
-            returns: both of the arrays connected line by line
-            """
-            # i can safely assume they are the same length
-            for i in range(len(array)):
-                array[i] += (" " * gaps) + other[i]
-
         gaps = 1
         buff = []
         for i in range(len(self._game)):
             if len(buff) == 0:
-                buff += board_as_array(self._game[i], i+1)
+                buff += self.board_as_array(self._game[i], i+1)
             else:
-                add_board_arrays(buff, board_as_array(self._game[i], i+1))
+                self.add_board_arrays(gaps, buff, self.board_as_array(self._game[i], i+1))
 
         string: str = ""
         for line in buff:
@@ -216,10 +215,10 @@ class Hanoi:
         return string
     
     def __len__(self) -> int:
-        """returns the amount of towers in the game board
-        parameters: 
-            -- self: a Tower object
-        returns: the length of the tower
+        """
+        purpose:
+        parameters:
+        return:
         """
         return len(self._game)
 
