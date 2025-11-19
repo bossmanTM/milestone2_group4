@@ -13,12 +13,10 @@ class Tower:
     """
 
     def __init__(self, rings, width):
-        """ initializes a tower with a given width and any rings you decide to add \n
+        """
+        purpose:
         parameters:
-             -- rings = the number of rings to add to the tower \n
-             -- width = the width of the tower \n
-        returns:
-            a Tower object
+        return:
         """
         if (not isinstance(rings, int)
             or not isinstance(width, int)):
@@ -30,11 +28,10 @@ class Tower:
             self.push(rings - i)
 
     def push(self, item) -> bool:
-        """add a ring to the tower \n
-        args:
-            -- item = an int representing the ring being added to the tower
-        returns:
-            -- True if successful
+        """
+        purpose:
+        parameters:
+        return:
         """
         if (not isinstance(item, int) 
             or not self.get_width() >= item > 0):
@@ -49,39 +46,29 @@ class Tower:
         return True
 
     def pop(self):
-        """removes a ring from the tower
-        parameters: 
-            -- self: a Tower object
-        returns: the int that was at the top of the tower
+        """
+        purpose:
+        parameters:
+        return:
         """
         return self._stack.pop()
 
     def ring(self, width: int, size: int) -> str: # i would really like this to be declared in __str__
-        """returns the string representation of a single ring
-            (this could be handled if ring was a class and this was __str__ but that is unneeded for the scale of this project)
-            parameters: 
-            -- width: the maximum size of the ring
-            -- size: the size of the ring
+        """
+        purpose:
+        parameters:
+        return:
         """
         spacing = (width - size) * ' '
         solid = size * '*'
         return f"{spacing}{solid}|{solid}{spacing}"
 
     def __str__(self) -> str:
-        """returns a string representation of the tower
-        parameters: 
-            -- self: a Tower object
-        returns: a string representation of the Tower
-        example:
-        .. code-block::
-        ***|***
-         **|**
-          *|*
-          
-          *|*
-           |
-           |
-        """    
+        """
+        purpose:
+        parameters:
+        return:
+        """   
 
         string = ""
         lst: list[int] = self._stack.get_lst()
@@ -94,46 +81,43 @@ class Tower:
         return string
     
     def __len__(self):
-        """returns the amount of rings in the tower
-        parameters: 
-            -- self: a Tower object
-        returns: the length of the tower
+        """
+        purpose:
+        parameters:
+        return:
         """
         return len(self._stack)
 
     def is_empty(self):
-        """returns true if the tower has nothing in it
-        parameters: 
-            -- self: a Tower object
-        returns: true if empty
+        """
+        purpose:
+        parameters:
+        return:
         """
         return self._stack.is_empty()
 
     def top(self):
-        """returns the top element in the stack (will print if stack is empty)
-        parameters: 
-            -- self: a Tower object
-        returns: the top element of the tower
+        """
+        purpose:
+        parameters:
+        return:
         """
         return self._stack.top()
 
     def get_width(self) -> int:
-        """returns the width of the tower
-        parameters: 
-            -- self: a Tower object
-        returns: the width of the tower
+        """
+        purpose:
+        parameters:
+        return:
         """
         return self._width
 
 class Hanoi:
     def __init__(self, towers, disks, target) -> None:
-        """defines a Hanoi board\n
-         -- towers = the amount of towers in the board  \n
-         -- disks = the number of disks in the first tower \n 
-         -- target = the tower you are trying to get all the disks to   \n 
-        parameters: 
-             -- self: a Tower object
-        returns: a Hanoi Object
+        """
+        purpose:
+        parameters:
+        return:
         """
         if (not isinstance(towers, int)
             or not isinstance(disks, int)
@@ -148,11 +132,10 @@ class Hanoi:
         
 
     def transfer(self, start: int, end: int) -> tuple:
-        """transfers one disc from a start board to an end
-        returns True if it succeeds
-        parameters: 
-            -- self: a Tower object
-        returns: True if successful
+        """
+        purpose:
+        parameters:
+        return:
         """
         print(len(self._game))
         if ((not 0 < start <= len(self._game))
@@ -195,10 +178,10 @@ class Hanoi:
         return [title] + str(board).split("\n")
         
     def __str__(self) -> str:
-        """string prepresentation of the Hanoi board
-        parameters: 
-            -- self: a Tower object
-        returns: a string representation of the object
+        """
+        purpose:
+        parameters:
+        return:
         """
 
         gaps = 1
@@ -223,10 +206,10 @@ class Hanoi:
         return len(self._game)
 
     def is_complete(self) -> bool:
-        """returns true if the entire stack in the target tower is full
-        parameters: 
-            -- self: a Tower object
-        returns: true if complete
+        """
+        purpose:
+        parameters:
+        return:
         """
         return len(self._game[self._target]) == self._disks
 
@@ -255,14 +238,20 @@ def get_ranged_input(prompt, input_min, input_max):
     return int(input_str)
 
 def verify_input(value:str, minimum: int, maximum: int):
-    """inclusively verifies your input is a digit within a given range
+    """
+    purpose:
+    parameters:
+    return:
     """
     if value.isdigit():
         return minimum <= int(value) <= maximum
     return False
 
 def new_game(steps: int):
-    """starts a new Hanoi game and prompts the user for the details of the game
+    """
+    purpose:
+    parameters:
+    return:
     """
     towers = get_ranged_input("Number of towers [min=3,..,max=9]? ", 3, 9)
     disks = get_ranged_input("Number of disks [min=3,..,max=9]? ", 3, 9)
@@ -273,7 +262,10 @@ def new_game(steps: int):
             
     
 def existing_game(filename):
-    """loads a pickled game from the filesystem, if the game does not exist it creates a new one
+    """
+    purpose:
+    parameters:
+    return:
     """
     game = None
     try:
@@ -285,6 +277,11 @@ def existing_game(filename):
     return game
     
 def move_a_disk(game) -> bool:
+    """
+    purpose:
+    parameters:
+    return:
+    """
     source_tower = get_ranged_input("Source Tower? ", 1, len(game))
     destination_tower = get_ranged_input("Destination Tower? ", 1, len(game))
     transfer_result = game.transfer(source_tower, destination_tower)
@@ -294,6 +291,11 @@ def move_a_disk(game) -> bool:
     return False
 
 def save(game, steps: int):
+    """
+    purpose:
+    parameters:
+    return:
+    """
     filename = input("Enter file name (e.g.: game.p): ")
     try:
         with open(filename, "wb") as f:
@@ -305,6 +307,11 @@ def save(game, steps: int):
     return True    
 
 def game_loop(game: Hanoi, steps: int):
+    """
+    purpose:
+    parameters:
+    return:
+    """
     running = True
         
     while running:
