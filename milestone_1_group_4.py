@@ -174,7 +174,7 @@ class Hanoi:
             other: The array going on the right side
         Return: None
         """
-            # Can safely assume the arrays are the same length
+        # Can safely assume the arrays are the same length
         for i in range(len(array)):
             array[i] += (" " * gaps) + other[i]
             
