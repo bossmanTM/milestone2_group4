@@ -238,24 +238,25 @@ def main():
     Parameters: None
     Return: None
     """
-    option = ""
     print("\nWELCOME TO HANOI TOWERS GAME!")
     option = get_ranged_input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ", 1, 2)
     if option == 1:
         print("Starting a new game ............")
         new_game()
     else:
-        game = None
-        while game == None:
-            filename = input("Enter file name (e.g.: game.p): ")
-            game = existing_game(filename)
-        game_loop(game)
+        filename = input("Enter file name (e.g.: game.p): ")
+        game = existing_game(filename)
+        if game == None:
+            print(f"file: {filename} not found: Starting a new game................")
+            new_game()
+        else:
+            game_loop(game)
         
 def get_ranged_input(prompt, input_min: str, input_max: str):
     """
     Purpose: To prompt the user for an input until it is inclusively within a target range
     Parameters:
-        prompt: The promt to give the user
+        prompt: The prompt to give to the user
         input_min: The minimum option the user can enter(inclusive)
         input_max: The maximum option the user can enter(inclusive)
     Return: An int representing the users option within the range
@@ -287,7 +288,6 @@ def new_game():
     towers = get_ranged_input("Number of towers [min=3,..,max=9]? ", 3, 9)
     disks = get_ranged_input("Number of disks [min=3,..,max=9]? ", 3, 9)
     target = get_ranged_input(f"Target Tower [min=2,..,max={towers}]? ", 2, towers)
-    
     game = Hanoi(towers, disks, target)
     game_loop(game)
             
@@ -302,8 +302,7 @@ def existing_game(filename: str):
         with open(filename, "rb") as f:
             game = pickle.load(f)
     except:
-        print(f"file: {filename} not found: Starting a new game................")
-        new_game()
+        return
     return game
     
 def move_a_disk(game: Hanoi) -> bool:
