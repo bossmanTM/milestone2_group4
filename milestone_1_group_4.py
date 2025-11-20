@@ -7,18 +7,19 @@ from stack import Stack
 import pickle
 
 class Tower:
-    """a class representing a tower from the game Hanoi. \n
-    a tower must only be accessed from the top
-    and you cannot have a larger item on top of a smaller one
+    """
+    A class representing a tower from the game Hanoi.
+    A Tower must only be accessed from the top,
+    and cannot have a larger disk on top of a smaller one
     """
 
-    def __init__(self, rings, width):
+    def __init__(self, rings: int, width: int):
         """
-        purpose: initialize a Tower
-        parameters: 
-            rings: the number of rings in each tower
-            width: the total width of the tower
-        return: a Tower object
+        Purpose: To initialize a Tower
+        Parameters: 
+            rings: The number of rings in each tower
+            width: The total width of the tower
+        Return: A Tower object
         """
         if (not isinstance(rings, int)
             or not isinstance(width, int)):
@@ -26,21 +27,20 @@ class Tower:
         
         self._width = width
         self._stack = Stack()
-        self._steps = 0
-        for i in range(rings):
-            self.push(rings - i)
+        for ring in range(rings):
+            self.push(rings - ring)
 
-    def push(self, item) -> bool:
+    def push(self, item: int) -> bool:
         """
-        purpose: push a ring to the tower
-        parameters: item: the ring you wish to push
-        return: true if successful
+        Purpose: Push a ring to the front of the Tower's stack
+        Parameters: item: The int value of the ring
+        Return: Boolean True or False
         """
         if (not isinstance(item, int) 
             or not self.get_width() >= item > 0):
             return False
         
-        # needed because stack.top will print if its empty            
+        # Needed otherwise stack.top will print if empty            
         if not self._stack.is_empty():
             top = self._stack.top()
             if top is not None and top < item:
@@ -50,17 +50,17 @@ class Tower:
 
     def pop(self):
         """
-        purpose: pops a ring from the tower removing that ring
-        parameters: 
-        return: an int representing the size of the ring
+        Purpose: Pops a ring from the Tower, removing that ring
+        Parameters: None
+        Return: An int representing the size of the ring
         """
         return self._stack.pop()
 
-    def ring(self, size: int) -> str: # i would really like this to be declared in __str__
+    def ring(self, size: int) -> str:
         """
-        purpose: get a string representation of a ring in the tower
-        parameters: size: the size of the ring
-        return: a string representing the ring
+        Purpose: To get a string representation of a ring in the tower
+        Parameters: size: The size of the ring
+        Return: A string representing the ring
         """
         spacing = (self._width - size) * ' '
         solid = size * '*'
@@ -68,9 +68,9 @@ class Tower:
 
     def __str__(self) -> str:
         """
-        purpose: get a string representation of the tower
-        parameters:
-        return: a string representing the tower
+        Purpose: To get a string representation of the Tower
+        Parameters: None
+        Return: A string representing the Tower
         """   
 
         string = ""
@@ -85,73 +85,71 @@ class Tower:
     
     def __len__(self):
         """
-        purpose: get the length of the tower
-        parameters:
-        return: an int representing the amount of rings in the tower
+        Purpose: To get the length of the tower
+        Parameters: None
+        Return: An int representing the amount of rings in the tower
         """
         return len(self._stack)
 
     def is_empty(self):
         """
-        purpose: check if the tower is empty
-        parameters:
-        return: true if empty
+        Purpose: To check if the Tower is empty
+        Parameters: None
+        Return: Boolean True or False
         """
         return self._stack.is_empty()
 
     def top(self):
         """
-        purpose: get the ring on top of the tower
-        parameters:
-        return: an int representing the ring at the top of the tower
+        Purpose: To get the ring on top of the tower
+        Parameters: None
+        Return: An int representing the ring at the top of the tower
         """
         return self._stack.top()
 
     def get_width(self) -> int:
         """
-        purpose: get the width of the tower
-        parameters:
-        return: an int representing the width of the tower
+        Purpose: To get the width of the tower
+        Parameters: None
+        Return: An int representing the width of the tower
         """
         return self._width
 
 class Hanoi:
-    def __init__(self, towers, disks, target):
+    def __init__(self, towers: int, disks: int, target: int):
         """
-        purpose: initialize a Hanoi game object
-        parameters:
-            towers: the amount of towers in the game
-            disks: the amount of disks in the stareting tower
-            target: the tower you are trying to transfer to
-        return: a Hanoi Object
+        Purpose: To initialize a Hanoi game object
+        Parameters:
+            towers: The amount of Towers in the game
+            disks: The amount of disks in the starting Tower
+            target: the Tower the user is trying to transfer all disks to
+        Return: a Hanoi Object
         """
         if (not isinstance(towers, int)
             or not isinstance(disks, int)
             or not isinstance(target, int)
             or not towers >= target >= 0):
             return
-        self._target = target-1
+        self._target = target - 1
         self._disks = disks
         self._game: list[Tower] = [Tower(disks, disks)]
+        self._steps = 0
         for i in range(towers - 1):
             self._game += [Tower(0, disks)]
         
-
     def transfer(self, start: int, end: int) -> tuple:
         """
-        purpose: transfer a ring from one tower to another
-        parameters:
-            start: an int pointing to the tower to transfer from 
-            end: an int poinint to the tower to transfer to 
-        return:
+        Purpose: Transfer a ring from one Tower to another
+        Parameters:
+            start: An int pointing to the Tower to transfer from 
+            end: An int pointing to the Tower to transfer to 
+        Return:
             (True if successful,
-            an error message if it failed)
+            an error message otherwise)
         """
-        print(len(self._game))
         if ((not 0 < start <= len(self._game))
             or (not 0 < end <= len(self._game))):
             return (False, "Invalid move. that is not a tower. Please try again!")
-        
         end -= 1
         start -= 1
         if self._game[start].is_empty():
@@ -167,41 +165,38 @@ class Hanoi:
         self._steps += 1
         return (True, "")
 
-
-    def add_board_arrays(self, gaps, array, other):
+    def add_board_arrays(self, gaps: int, array: list, other: list):
         """
-        purpose: zip two arrays together
-        parameters: 
-            gaps: the amount of padding between array entries
-            array: the array going on the left side
-            other: the array going on the right side
-        return:
+        Purpose: To neatly concatenate two arrays side by side
+        Parameters: 
+            gaps: The amount of padding between array entries
+            array: The array going on the left side
+            other: The array going on the right side
+        Return: None
         """
-            # i can safely assume they are the same length
+            # Can safely assume the arrays are the same length
         for i in range(len(array)):
             array[i] += (" " * gaps) + other[i]
             
-    def board_as_array(self, board, number) -> list[str]:
+    def board_as_array(self, board: str, number: int) -> list[str]:
         """
-        purpose: convert a board to array separating at new lines and adds a title
-        parameters: 
-            board: the board to split
-            number: the title number of the board
-        return: the array representation of the board
+        Purpose: To convert a board to array separating at new lines and adds a title
+        Parameters: 
+            board: The board to split
+            number: The title number of the board
+        Return: The array representation of the board
         """
         title_bar = board.get_width() * "="
         title = title_bar + str(number) + title_bar
-        return [title] + str(board).split("\n")
+        return [title] + str(board).split("\n")[:-1]
         
     def __str__(self) -> str:
         """
-        purpose: get a string representation of the board
-        parameters:
-        return: a string representing the Hanoi board
+        Purpose: To get a string representation of the board
+        Parameters: None
+        Return: A string representing the Hanoi board
         """
-
-        gaps = 1
-        buff = []
+        buff, gaps = [], 1
         for i in range(len(self._game)):
             if len(buff) == 0:
                 buff += self.board_as_array(self._game[i], i+1)
@@ -215,56 +210,55 @@ class Hanoi:
     
     def __len__(self) -> int:
         """
-        purpose: get the length of the game board
-        parameters:
-        return: an int representing the amount of games in the board
+        Purpose: To get the length of the game board
+        Parameters: None
+        Return: An int representing the amount of games in the board
         """
         return len(self._game)
 
     def is_complete(self) -> bool:
         """
-        purpose: determine if the game is complete (all disks are in the target tower)
-        parameters:
-        return: True if complete
+        Purpose: To determine if the game is complete (all disks are in the target tower)
+        Parameters: None
+        Return: Boolean True or False
         """
         return len(self._game[self._target]) == self._disks
         
     def get_steps(self):
         """
-        purpose: get the amount of steps taken so far
-        parameters: 
-        return: an int representing the number of steps taken
+        Purpose: To get the amount of steps taken so far
+        Parameters: None
+        Return: An int representing the number of steps taken
         """
         return self._steps
 
 def main():
     """
-    purpose: enter the program 
-    parameters:
-    return: None
+    Purpose: To enter the program 
+    Parameters: None
+    Return: None
     """
     option = ""
-    print("WELCOME TO HANOI TOWERS GAME!")
+    print("\nWELCOME TO HANOI TOWERS GAME!")
     option = get_ranged_input("\nEnter 1 to Start a new game and 2 to Resume a saved game: ", 1, 2)
     if option == 1:
         print("Starting a new game ............")
         new_game()
     else:
         game = None
-        while game is None:
+        while game == None:
             filename = input("Enter file name (e.g.: game.p): ")
             game = existing_game(filename)
         game_loop(game)
         
-
-def get_ranged_input(prompt, input_min, input_max):
+def get_ranged_input(prompt, input_min: str, input_max: str):
     """
-    purpose: prompt the user for an input until it is inclusively within a target range
-    parameters:
-        prompt: the promt to give the user
-        input_min: the minimum option the user can enter(inclusive)
-        input_max: the maximum option the user can enter(inclusive)
-    return: an int representing the users option within the range
+    Purpose: To prompt the user for an input until it is inclusively within a target range
+    Parameters:
+        prompt: The promt to give the user
+        input_min: The minimum option the user can enter(inclusive)
+        input_max: The maximum option the user can enter(inclusive)
+    Return: An int representing the users option within the range
     """
     input_str = ""
     while verify_input(input_str, input_min, input_max) == False:
@@ -273,12 +267,12 @@ def get_ranged_input(prompt, input_min, input_max):
 
 def verify_input(value:str, minimum: int, maximum: int):
     """
-    purpose: inclusively verify that your input is an int within the range
-    parameters: 
-        value: the input to be tested
-        minimum: the minimum allowable integer (inclusive)
-        maximum: the maximum allowable integer (inclusive)
-    return: True if within the range and an int
+    Purpose: To inclusively verify that the user input is an int within the range
+    Parameters: 
+        value: The input to be tested
+        minimum: The minimum allowable integer (inclusive)
+        maximum: The maximum allowable integer (inclusive)
+    Return: Boolean True or False
     """
     if value.isdigit():
         return minimum <= int(value) <= maximum
@@ -286,23 +280,22 @@ def verify_input(value:str, minimum: int, maximum: int):
 
 def new_game():
     """
-    purpose: start a new Hanoi game
-    parameters: steps: t
-    return:
+    Purpose: To start a new Hanoi game
+    Parameters: None
+    Return: None
     """
     towers = get_ranged_input("Number of towers [min=3,..,max=9]? ", 3, 9)
     disks = get_ranged_input("Number of disks [min=3,..,max=9]? ", 3, 9)
-    target = get_ranged_input(f"Target Tower [min=2,..,max={towers}]? ", 2, towers+1)
+    target = get_ranged_input(f"Target Tower [min=2,..,max={towers}]? ", 2, towers)
     
     game = Hanoi(towers, disks, target)
     game_loop(game)
             
-    
-def existing_game(filename):
+def existing_game(filename: str):
     """
-    purpose: load an existing game if it exists
-    parameters: filename: the name of the savefile
-    return: a Hanoi game
+    Purpose: To load an existing game if it exists
+    Parameters: filename: The name of the savefile
+    Return: A Hanoi game
     """
     game = None
     try:
@@ -313,57 +306,53 @@ def existing_game(filename):
         new_game()
     return game
     
-def move_a_disk(game) -> bool:
+def move_a_disk(game: Hanoi) -> bool:
     """
-    purpose: prompt the user then move a disk from a start tower to an end tower
-    parameters: game: the Hanoi game object
-    return: True if successful
+    Purpose: To prompt the user then move a disk from a start tower to an end tower
+    Parameters: game: The Hanoi game object
+    Return: Boolean True or False
     """
-    source_tower = get_ranged_input("Source Tower? ", 1, len(game))
-    destination_tower = get_ranged_input("Destination Tower? ", 1, len(game))
+    source_tower = get_ranged_input("Source Tower ? ", 1, len(game))
+    destination_tower = get_ranged_input("Destination Tower ? ", 1, len(game))
     transfer_result = game.transfer(source_tower, destination_tower)
     if transfer_result[0]:
         return True
     print(transfer_result[1])
     return False
 
-def save(game):
+def save(game: Hanoi):
     """
-    purpose: prompt the user and save the game
-    parameters: game: a Hanoi game to save
-    return: True if successful
+    Purpose: To prompt the user for a file name and save the game
+    Parameters: game: a Hanoi game to save
+    Return: Boolean True or False
     """
     filename = input("Enter file name (e.g.: game.p): ")
     try:
         with open(filename, "wb") as f:
             pickle.dump(game, f)
     except OSError:
-        print("Failed to open file for saving")
         return False
     print("Game Saved ......")
     return True    
 
 def game_loop(game: Hanoi):
     """
-    purpose: handle each game operation
-    parameters: game: a Hanoi game to operate on
-    return: None
+    Purpose: To handle each game operation
+    Parameters: game: a Hanoi game to operate on
+    Return: None
     """
     running = True
-        
     while running:
         print(f"\n{game}", end = "")
-        print("1 - Move a Disk")
-        print("2 - Save and End")
-        print("3 - End without Saving\n")
-        option = get_ranged_input("Enter 1, 2, or 3: ", 1, 4)
+        options = f"\n{"":>4}1 - Move a Disk\n{"":>4}2 - Save and End\n{"":>4}3 - End without Saving\n\n"        
+        option = get_ranged_input(f"{options}Enter 1 or 2 or 3: ", 1, 3)
         if option == 1:
             success = move_a_disk(game)
             if success:
                 if game.is_complete():
-                    print(f"\n{game}Good job! Transfer achieved in {game.get_steps()} steps")
+                    print(f"\n{game}\nGood job! Transfer achieved in {game.get_steps()} steps")
                     return
-                
+
         elif option == 2:
             save_success = False 
             while not save_success:
@@ -372,7 +361,6 @@ def game_loop(game: Hanoi):
             running = False
             
         elif option == 3:
-            print("Ending Game ......")
-            print("Goodbye!")
+            print("Ending Game ......\nGoodbye!")
             running = False
 main()
