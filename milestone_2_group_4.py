@@ -6,8 +6,6 @@
 # from milestone_1_group_4 import Hanoi; temporarily commented so the program can be tested
 from graphics import *
 
-# Triple quotes from line 10 and line 50 are so you can see what the output is currently
-""" 
 def game_loop(game: Hanoi):
     """
     purpose: handle each iteration of the game
@@ -47,7 +45,6 @@ def draw_game(window: GraphWin, game: Hanoi):
     """
     
     return
-"""
 
 def draw_background(window: GraphWin):
     """
