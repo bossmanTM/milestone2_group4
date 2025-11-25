@@ -76,7 +76,7 @@ def draw_towers(window: GraphWin):
 
 def main(): # Testing window output
     window = GraphWin("Hanoi Towers Game", 900, 600)
-    draw_static(window)
+    draw_background(window)
     towers = draw_towers(window)
     try:
         cursor = window.getMouse()
