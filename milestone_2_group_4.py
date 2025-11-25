@@ -62,10 +62,10 @@ def draw_static(window: GraphWin):
     """
     # Initialize and draw the static graphics objects
     disk = Text(Point(230, 40), "Number of Disks? (Enter a positive int: 3 by default)")
-    target = Text(Point(220, 75), "Target Tower? (Enter a positive int: 3 by default)") 
+    target = Text(Point(219, 75), "Target Tower? (Enter a positive int: 3 by default)") 
     line = Line(Point(50, 450), Point(850, 450))
-    source = Text(Point(100, 540), "From tower?")
-    destination = Text(Point(210, 540), "to tower?")   
+    source = Text(Point(97, 540), "From tower?")
+    destination = Text(Point(207, 540), "to tower?")   
     static = (disk, destination, line, source, target) 
     for item in static:
         item.draw(window)
