@@ -1,5 +1,5 @@
 from milestone_1_group_4 import Hanoi 
-from graphics import GraphWin
+from graphics import *
 
 def game_loop(game: Hanoi):
     """
