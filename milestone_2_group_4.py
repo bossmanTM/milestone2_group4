@@ -43,6 +43,15 @@ def draw_game(window: GraphWin, game: Hanoi):
 
 def draw_background(window: GraphWin):
     """
+    Purpose: tba
+    Parameters: The GraphWin object called "window"
+    Return: The tuple of the list called "towers"
+    """
+    draw_static(window)
+    return draw_towers(window)
+
+def draw_static(window: GraphWin):
+    """
     Purpose: To draw some of the graphics objects that do not change on the window
     Parameters: The GraphWin object called "window"
     Return: None
@@ -76,8 +85,7 @@ def draw_towers(window: GraphWin):
 
 def main(): # Testing window output
     window = GraphWin("Hanoi Towers Game", 900, 600)
-    draw_background(window)
-    towers = draw_towers(window)
+    towers = draw_background(window)
     try:
         cursor = window.getMouse()
     except:
