@@ -6,7 +6,7 @@
 # from milestone_1_group_4 import Hanoi; temporarily commented so the program can be tested
 from graphics import *
 
-def game_loop(game: Hanoi):
+def game_loop(game): # Removed Hanoi type hint temporarily
     """
     purpose: handle each iteration of the game
     parameters: game: The Hanoi board to be played
@@ -17,7 +17,7 @@ def game_loop(game: Hanoi):
     draw_background(window)
     pass
 
-def save_game(filename: str, game: Hanoi):
+def save_game(filename: str, game): # Removed Hanoi type hint temporarily
     """
     purpose: save the game
     parameters: 
@@ -35,7 +35,7 @@ def load_game(filename: str):
     """
     pass 
 
-def draw_game(window: GraphWin, game: Hanoi):
+def draw_game(window: GraphWin, game): # Removed Hanoi type hint temporarily
     """
     purpose: draw the game onto screen
     parameters: 
@@ -43,7 +43,6 @@ def draw_game(window: GraphWin, game: Hanoi):
         game: The Hanoi board to be drawn
     return: None
     """
-    
     return
 
 def draw_background(window: GraphWin):
