@@ -8,9 +8,9 @@ from graphics import *
 
 def game_loop(game): # Removed Hanoi type hint temporarily
     """
-    purpose: handle each iteration of the game
-    parameters: game: The Hanoi board to be played
-    return: None
+    Purpose: Handle each iteration of the game
+    Parameters: game: The Hanoi board to be played
+    Return: None
     """
     window = GraphWin("Towers of Hanoi")
     draw_game(window, game)
@@ -19,29 +19,29 @@ def game_loop(game): # Removed Hanoi type hint temporarily
 
 def save_game(filename: str, game): # Removed Hanoi type hint temporarily
     """
-    purpose: save the game
-    parameters: 
-        filename: the name to save the game as
-        game: the game to save
-    return: None
+    Purpose: To save the game
+    Parameters: 
+        filename: The name to save the game as
+        game: The game to save
+    Return: None
     """
     pass
 
 def load_game(filename: str):
     """
-    purpose: load the game using a given filename
-    parameters: filename: the name of the savefile to load
-    return: a Hanoi object representing either the game with the filename or a new one if it doesnt exist
+    Purpose: To load the game using a given filename
+    Parameters: filename: The name of the savefile to load
+    Return: A Hanoi object representing either the game with the filename or a new one if it doesnt exist
     """
     pass 
 
 def draw_game(window: GraphWin, game): # Removed Hanoi type hint temporarily
     """
-    purpose: draw the game onto screen
-    parameters: 
-        window: the window to be edited
+    Purpose: To draw the game onto screen
+    Parameters: 
+        window: The window to be edited
         game: The Hanoi board to be drawn
-    return: None
+    Return: None
     """
     return
 
