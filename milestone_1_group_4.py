@@ -237,6 +237,12 @@ class Hanoi:
         Return: An int representing the number of steps taken
         """
         return self._steps
+    
+    def get_tower(self, i):
+        if i < len(self._game):
+            return self._game[i]
+        else:
+            return None
 
 def main():
     """

@@ -53,7 +53,7 @@ def draw_background(window: GraphWin):
     Return: The tuple of the list called "towers"
     """
     draw_static(window)
-    return draw_towers(window)
+    return
 
 def draw_static(window: GraphWin):
     """
@@ -71,7 +71,7 @@ def draw_static(window: GraphWin):
     for item in static:
         item.draw(window)
 
-def draw_towers(window: GraphWin):
+def draw_towers(window: GraphWin, game: Hanoi):
     """
     Purpose: To draw the towers on the window
     Parameters: The GraphWin object called "window"
@@ -86,7 +86,7 @@ def draw_towers(window: GraphWin):
     towers = []
     for tower_num in range(0, 3):
         tower_x = margins + (tower_num * (tower_width))
-        tower = make_tower(window, Tower(10, 10), tower_x, tower_bottom, tower_width, shaft_width, tower_height)
+        tower = make_tower(window, game.get_tower(tower_num), tower_x, tower_bottom, tower_width, shaft_width, tower_height)
         tower[0].setFill("red")
         tower[0].setOutline("black")
         for ring in tower[1]:
@@ -118,7 +118,8 @@ def make_tower(window:GraphWin, tower:Tower, x, y, tower_width, pole_width, heig
 
 def main(): # Testing window output
     window = GraphWin("Hanoi Towers Game", 900, 600)
-    towers = draw_background(window)
+    draw_background(window)
+    towers = draw_towers(window, Hanoi(3, 10, 2))
     try:
         cursor = window.getMouse()
     except:
