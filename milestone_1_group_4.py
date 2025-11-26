@@ -114,6 +114,12 @@ class Tower:
         Return: An int representing the width of the tower
         """
         return self._width
+    
+    def get_disk(self, i):
+        if i < len(self._stack):
+            return self._stack.get_lst()[i]
+        else:
+            return 0
 
 class Hanoi:
     def __init__(self, towers: int, disks: int, target: int):
@@ -362,4 +368,3 @@ def game_loop(game: Hanoi):
         elif option == 3:
             print("Ending Game ......\nGoodbye!")
             running = False
-main()

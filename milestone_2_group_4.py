@@ -5,6 +5,7 @@
 
 # from milestone_1_group_4 import Hanoi; temporarily commented so the program can be tested
 from graphics import *
+from milestone_1_group_4 import Tower, Hanoi
 
 def game_loop(game): # Removed Hanoi type hint temporarily
     """
@@ -76,16 +77,44 @@ def draw_towers(window: GraphWin):
     Parameters: The GraphWin object called "window"
     Return: The tuple of the list called "towers"
     """    
+    margins = 50
+    tower_width = ((window.getWidth()-margins*2)/3)
+    tower_height = 200
+    tower_bottom = 250
+    shaft_width = 5
     # Initialize and draw the towers with spacing in-between
     towers = []
-    for tower_num in range(1, 4):
-        tower_x = tower_num * 220
-        tower = Rectangle(Point(tower_x, 250), Point((tower_x + 5), 450))
-        tower.setFill("red")
-        tower.setOutline("black")
+    for tower_num in range(0, 3):
+        tower_x = margins + (tower_num * (tower_width))
+        tower = make_tower(window, Tower(10, 10), tower_x, tower_bottom, tower_width, shaft_width, tower_height)
+        tower[0].setFill("red")
+        tower[0].setOutline("black")
+        for ring in tower[1]:
+            ring.setFill("blue")
+            ring.setOutline("black")
+            ring.draw(window)
         towers.append(tower)
-        tower.draw(window)    
+        tower[0].draw(window)    
     return tuple(towers)    
+
+def make_tower(window:GraphWin, tower:Tower, x, y, tower_width, pole_width, height):
+    """
+    Purpose: return the shape representation of the tower
+    Parameters: 
+        window: The GraphWin object
+        (x, y): the position of the top left corner of the tower
+        width: the width of the tower
+        height: the height of the tower
+    Return: a tuple storing the tower and a list of its rings
+    """   
+    center = x + tower_width/2
+    pole = Rectangle(Point((center - pole_width/2), y), Point((center + pole_width/2), y + height))
+    rings = []
+    unit_height = height/tower.get_width()
+    unit_width = tower_width/tower.get_width()
+    for i in range(len(tower)):
+        rings.append(Rectangle(Point((center - (unit_width/2) * tower.get_disk(i)), y+height - i*unit_height), Point(center + (unit_width/2) * tower.get_disk(i), y+height - (i+1)*unit_height)))
+    return (pole, rings)
 
 def main(): # Testing window output
     window = GraphWin("Hanoi Towers Game", 900, 600)
