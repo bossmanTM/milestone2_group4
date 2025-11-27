@@ -6,6 +6,7 @@
 # from milestone_1_group_4 import Hanoi; temporarily commented so the program can be tested
 from graphics import *
 from milestone_1_group_4 import Tower, Hanoi
+import pickle
 
 def game_loop(game): # Removed Hanoi type hint temporarily
     """
@@ -26,7 +27,12 @@ def save_game(filename: str, game): # Removed Hanoi type hint temporarily
         game: The game to save
     Return: None
     """
-    pass
+    try:
+        with open(filename, "wb") as f:
+            pickle.dump(game, f)
+    except OSError:
+        return False
+    return True 
 
 def load_game(filename: str):
     """
@@ -34,7 +40,13 @@ def load_game(filename: str):
     Parameters: filename: The name of the savefile to load
     Return: A Hanoi object representing either the game with the filename or a new one if it doesnt exist
     """
-    pass 
+    game = None
+    try:
+        with open(filename, "rb") as f:
+            game = pickle.load(f)
+    except:
+        return
+    return game
 
 def draw_game(window: GraphWin, game): # Removed Hanoi type hint temporarily
     """
