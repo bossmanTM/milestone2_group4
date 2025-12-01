@@ -154,7 +154,9 @@ def make_tower(window:GraphWin, tower:Tower, x:int, y:int, tower_width:int, pole
     unit_height = height/tower.get_width()
     unit_width = tower_width/tower.get_width()
     for i in range(len(tower)):
-        rings.append(Rectangle(Point((center - (unit_width/2) * tower.get_disk(i)), y+height - i*unit_height), Point(center + (unit_width/2) * tower.get_disk(i), y+height - (i+1)*unit_height)))
+        start_point = Point((center - (unit_width/2) * tower.get_disk(i)), y+height - i*unit_height)
+        end_point = Point(center + (unit_width/2) * tower.get_disk(i), y+height - (i+1)*unit_height)
+        rings.append(Rectangle(start_point, end_point))
     return (pole, rings)
 
 def main(): # Testing window output
