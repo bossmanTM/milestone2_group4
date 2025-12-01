@@ -56,7 +56,8 @@ def draw_background(window: GraphWin):
     quit = draw_button(window, 780, 70, 55, 30, "Quit")
     save = draw_button(window, 780, 70, 95, 30, "Save")
     load = draw_button(window, 780, 70, 135, 30, "Load")
-    buttons = (load, quit, reset, save)
+    move = draw_button(window, 310, 100, 525, 30, "Move Disk") 
+    buttons = (load, move, quit, reset, save)
     return buttons
     
 def draw_button(window:GraphWin, start_x:int, w:int, start_y:int, h:int, display:str):
@@ -154,17 +155,19 @@ def main(): # Testing window output
             cursor = window.getMouse()
         except:
             window.close()
-        try:
-            if is_clicked(cursor, buttons[2]):
+        try: # Currently, clicking any button other than quit then clicking the "x" will cause an infinite loop
+            if is_clicked(cursor, buttons[3]):
                 print("Resetting...")
-            elif is_clicked(cursor, buttons[1]):
+            elif is_clicked(cursor, buttons[2]):
                 print("Quitting...")
                 window.close()
                 break
-            elif is_clicked(cursor, buttons[3]):
+            elif is_clicked(cursor, buttons[4]):
                 print("Saving...")
             elif is_clicked(cursor, buttons[0]):
                 print("Loading...")
+            elif is_clicked(cursor, buttons[1]):
+                print("Moving Disk...")            
         except UnboundLocalError:
             window.close()
 main()
