@@ -3,23 +3,20 @@
 # Programming Project - Milestone #2
 # ----------------------------------
 
-# from milestone_1_group_4 import Hanoi; temporarily commented so the program can be tested
 from graphics import *
-from milestone_1_group_4 import Tower, Hanoi
+# File to be imported from Downloads must be named "milestone_1_group_4" for the program to function
+from milestone_1_group_4 import Tower, Hanoi 
 import pickle
 
-def game_loop(game): # Removed Hanoi type hint temporarily
+def game_loop(game:Hanoi):
     """
     Purpose: Handle each iteration of the game
     Parameters: game: The Hanoi board to be played
     Return: None
     """
-    window = GraphWin("Towers of Hanoi")
-    draw_game(window, game)
-    draw_background(window)
     pass
 
-def save_game(filename: str, game): # Removed Hanoi type hint temporarily
+def save_game(filename:str, game:Hanoi):
     """
     Purpose: To save the game
     Parameters: 
@@ -34,7 +31,7 @@ def save_game(filename: str, game): # Removed Hanoi type hint temporarily
         return False
     return True 
 
-def load_game(filename: str):
+def load_game(filename:str):
     """
     Purpose: To load the game using a given filename
     Parameters: filename: The name of the savefile to load
@@ -48,26 +45,30 @@ def load_game(filename: str):
         return
     return game
 
-def draw_game(window: GraphWin, game): # Removed Hanoi type hint temporarily
-    """
-    Purpose: To draw the game onto screen
-    Parameters: 
-        window: The window to be edited
-        game: The Hanoi board to be drawn
-    Return: None
-    """
-    return
-
 def draw_background(window: GraphWin):
     """
     Purpose: To draw the background elements; more detailed purpose tba
     Parameters: The GraphWin object called "window"
-    Return: The tuple of the list called "towers"
+    Return: The tuple called "buttons"
     """
     draw_static(window)
-    return
+    reset = draw_button(window, 55, 70, 110, 30, "Reset")
+    quit = draw_button(window, 780, 70, 55, 30, "Quit")
+    save = draw_button(window, 780, 70, 95, 30, "Save")
+    load = draw_button(window, 780, 70, 135, 30, "Load")
+    buttons = (load, quit, reset, save)
+    return buttons
+    
+def draw_button(window:GraphWin, start_x:int, w:int, start_y:int, h:int, display:str):
+    rect = Rectangle(Point(start_x, start_y), Point((start_x + w), (start_y + h)))
+    rect.draw(window)
+    x_mid = (((start_x * 2) + w)) // 2
+    y_mid = (((start_y * 2) + h)) // 2
+    text = Text(Point(x_mid, y_mid), display)
+    text.draw(window)
+    return rect    
 
-def draw_static(window: GraphWin):
+def draw_static(window:GraphWin):
     """
     Purpose: To draw some of the graphics objects that do not change on the window
     Parameters: The GraphWin object called "window"
@@ -83,7 +84,7 @@ def draw_static(window: GraphWin):
     for item in static:
         item.draw(window)
 
-def draw_towers(window: GraphWin, game: Hanoi):
+def draw_towers(window:GraphWin, game:Hanoi):
     """
     Purpose: To draw the towers on the window
     Parameters: The GraphWin object called "window"
@@ -109,15 +110,31 @@ def draw_towers(window: GraphWin, game: Hanoi):
         tower[0].draw(window)    
     return tuple(towers)    
 
-def make_tower(window:GraphWin, tower:Tower, x, y, tower_width, pole_width, height):
+def is_clicked(pt, rect):
     """
-    Purpose: return the shape representation of the tower
+    Purpose: To return True or False based on whether the user clicked the button
+    Parameters: 
+        pt: The Point object called "pt"
+        rect: The Rectangle object called "rect"
+    Return: The boolean True or False
+    """      
+    x, y = pt.getX(), pt.getY()
+    p1, p2 = rect.getP1(), rect.getP2()
+    x1, x2 = p1.getX(), p2.getX()
+    y1, y2 = p1.getY(), p2.getY()
+    if (x1 <= x <= x2) and (y1 <= y <= y2):
+        return True
+    return False
+
+def make_tower(window:GraphWin, tower:Tower, x:int, y:int, tower_width:int, pole_width:int, height:int):
+    """
+    Purpose: To return the shape representation of the tower
     Parameters: 
         window: The GraphWin object
-        (x, y): the position of the top left corner of the tower
-        width: the width of the tower
-        height: the height of the tower
-    Return: a tuple storing the tower and a list of its rings
+        (x, y): The position of the top left corner of the tower
+        width: The width of the tower
+        height: The height of the tower
+    Return: A tuple storing the tower and a list of its rings
     """   
     center = x + tower_width/2
     pole = Rectangle(Point((center - pole_width/2), y), Point((center + pole_width/2), y + height))
@@ -130,11 +147,24 @@ def make_tower(window:GraphWin, tower:Tower, x, y, tower_width, pole_width, heig
 
 def main(): # Testing window output
     window = GraphWin("Hanoi Towers Game", 900, 600)
-    draw_background(window)
+    buttons = draw_background(window)
     towers = draw_towers(window, Hanoi(3, 10, 2))
-    try:
-        cursor = window.getMouse()
-    except:
-        window.close()
-
+    while True:
+        try:
+            cursor = window.getMouse()
+        except:
+            window.close()
+        try:
+            if is_clicked(cursor, buttons[2]):
+                print("Resetting...")
+            elif is_clicked(cursor, buttons[1]):
+                print("Quitting...")
+                window.close()
+                break
+            elif is_clicked(cursor, buttons[3]):
+                print("Saving...")
+            elif is_clicked(cursor, buttons[0]):
+                print("Loading...")
+        except UnboundLocalError:
+            window.close()
 main()
