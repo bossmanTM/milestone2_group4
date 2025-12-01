@@ -49,7 +49,7 @@ def draw_background(window: GraphWin):
     """
     Purpose: To draw the background elements
     Parameters: The GraphWin object called "window"
-    Return: The tuple called "buttons"
+    Return: The tuples called "buttons" and "entries"
     """
     draw_static(window)
     reset = draw_button(window, 55, 70, 110, 30, "Reset")
@@ -58,6 +58,7 @@ def draw_background(window: GraphWin):
     load = draw_button(window, 780, 70, 120, 30, "Load")
     move = draw_button(window, 300, 100, 525, 30, "Move Disk") 
     buttons = (load, move, quit, reset, save)
+    
     disk_num = draw_entry(window, 430, 40, 2)
     target = draw_entry(window, 430, 75, 2)
     source = draw_entry(window, 157, 540, 2)
