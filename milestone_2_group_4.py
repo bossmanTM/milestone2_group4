@@ -47,7 +47,7 @@ def load_game(filename:str):
 
 def draw_background(window: GraphWin):
     """
-    Purpose: To draw the background elements; more detailed purpose tba
+    Purpose: To draw the background elements
     Parameters: The GraphWin object called "window"
     Return: The tuple called "buttons"
     """
@@ -56,9 +56,14 @@ def draw_background(window: GraphWin):
     quit = draw_button(window, 780, 70, 55, 30, "Quit")
     save = draw_button(window, 780, 70, 95, 30, "Save")
     load = draw_button(window, 780, 70, 135, 30, "Load")
-    move = draw_button(window, 310, 100, 525, 30, "Move Disk") 
+    move = draw_button(window, 300, 100, 525, 30, "Move Disk") 
     buttons = (load, move, quit, reset, save)
-    return buttons
+    disk_num = draw_entry(window, 430, 40, 2)
+    target = draw_entry(window, 430, 75, 2)
+    source = draw_entry(window, 157, 540, 2)
+    destination = draw_entry(window, 255, 540, 2)
+    entries = (disk_num, destination, source, target)
+    return buttons, entries
     
 def draw_button(window:GraphWin, start_x:int, w:int, start_y:int, h:int, display:str):
     rect = Rectangle(Point(start_x, start_y), Point((start_x + w), (start_y + h)))
@@ -68,6 +73,11 @@ def draw_button(window:GraphWin, start_x:int, w:int, start_y:int, h:int, display
     text = Text(Point(x_mid, y_mid), display)
     text.draw(window)
     return rect    
+
+def draw_entry(window:GraphWin, start_x:int, start_y:int, w:int):
+    entry = Entry(Point(start_x, start_y), w)
+    entry.draw(window)
+    return entry
 
 def draw_static(window:GraphWin):
     """
@@ -148,7 +158,7 @@ def make_tower(window:GraphWin, tower:Tower, x:int, y:int, tower_width:int, pole
 
 def main(): # Testing window output
     window = GraphWin("Hanoi Towers Game", 900, 600)
-    buttons = draw_background(window)
+    buttons, entries = draw_background(window)
     towers = draw_towers(window, Hanoi(3, 10, 2))
     while True:
         try:
