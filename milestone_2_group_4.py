@@ -53,9 +53,9 @@ def draw_background(window: GraphWin):
     """
     draw_static(window)
     reset = draw_button(window, 55, 70, 110, 30, "Reset")
-    quit = draw_button(window, 780, 70, 55, 30, "Quit")
-    save = draw_button(window, 780, 70, 95, 30, "Save")
-    load = draw_button(window, 780, 70, 135, 30, "Load")
+    quit = draw_button(window, 780, 70, 40, 30, "Quit")
+    save = draw_button(window, 780, 70, 80, 30, "Save")
+    load = draw_button(window, 780, 70, 120, 30, "Load")
     move = draw_button(window, 300, 100, 525, 30, "Move Disk") 
     buttons = (load, move, quit, reset, save)
     disk_num = draw_entry(window, 430, 40, 2)
