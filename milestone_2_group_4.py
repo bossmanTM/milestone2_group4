@@ -42,7 +42,7 @@ def load_game(filename:str):
         with open(filename, "rb") as f:
             game = pickle.load(f)
     except:
-        return
+        return 
     return game
 
 def draw_background(window: GraphWin):
@@ -63,7 +63,7 @@ def draw_background(window: GraphWin):
     target = draw_entry(window, 430, 75, 2)
     source = draw_entry(window, 157, 540, 2)
     destination = draw_entry(window, 255, 540, 2)
-    entries = (disk_num, destination, source, target)
+    entries = {"disk_num": disk_num, "destination": destination, "source": source, "target":target}
     return buttons, entries
     
 def draw_button(window:GraphWin, start_x:int, w:int, start_y:int, h:int, display:str):
@@ -111,16 +111,17 @@ def draw_towers(window:GraphWin, game:Hanoi):
     towers = []
     for tower_num in range(0, 3):
         tower_x = margins + (tower_num * (tower_width))
-        tower = make_tower(window, game.get_tower(tower_num), tower_x, tower_bottom, tower_width, shaft_width, tower_height)
+        tower = make_tower(game.get_tower(tower_num), tower_x, tower_bottom, tower_width, shaft_width, tower_height)
         tower[0].setFill("red")
         tower[0].setOutline("black")
         for ring in tower[1]:
             ring.setFill("blue")
             ring.setOutline("black")
             ring.draw(window)
+            
         towers.append(tower)
         tower[0].draw(window)    
-    return tuple(towers)    
+    return towers    
 
 def is_clicked(pt, rect):
     """
@@ -138,7 +139,7 @@ def is_clicked(pt, rect):
         return True
     return False
 
-def make_tower(window:GraphWin, tower:Tower, x:int, y:int, tower_width:int, pole_width:int, height:int):
+def make_tower(tower:Tower, x:int, y:int, tower_width:int, pole_width:int, height:int):
     """
     Purpose: To return the shape representation of the tower
     Parameters: 
@@ -148,9 +149,9 @@ def make_tower(window:GraphWin, tower:Tower, x:int, y:int, tower_width:int, pole
         height: The height of the tower
     Return: A tuple storing the tower and a list of its rings
     """   
+    rings = []
     center = x + tower_width/2
     pole = Rectangle(Point((center - pole_width/2), y), Point((center + pole_width/2), y + height))
-    rings = []
     unit_height = height/tower.get_width()
     unit_width = tower_width/tower.get_width()
     for i in range(len(tower)):
@@ -159,10 +160,19 @@ def make_tower(window:GraphWin, tower:Tower, x:int, y:int, tower_width:int, pole
         rings.append(Rectangle(start_point, end_point))
     return (pole, rings)
 
+def getIntOrDefault(string:str, default:int):
+    if string.isnumeric():
+        print("test")
+        return int(string)
+    else:
+        return default
+
 def main(): # Testing window output
     window = GraphWin("Hanoi Towers Game", 900, 600)
     buttons, entries = draw_background(window)
-    towers = draw_towers(window, Hanoi(3, 10, 2))
+    disks = 3
+    game = Hanoi(3, disks, 3)
+    towers = draw_towers(window, game)
     while True:
         try:
             cursor = window.getMouse()
@@ -171,16 +181,37 @@ def main(): # Testing window output
         try: # Currently, clicking any button other than quit then clicking the "x" will cause an infinite loop
             if is_clicked(cursor, buttons[3]):
                 print("Resetting...")
+                game = Hanoi(3, getIntOrDefault(entries["disk_num"].getText(), 3), getIntOrDefault(entries["target"].getText(), 3))
             elif is_clicked(cursor, buttons[2]):
                 print("Quitting...")
                 window.close()
                 break
             elif is_clicked(cursor, buttons[4]):
                 print("Saving...")
+                save_game("savefile",game)
             elif is_clicked(cursor, buttons[0]):
                 print("Loading...")
+                loaded_game = load_game("savefile")
+                if loaded_game is None:
+                    game = Hanoi(3, disks, 2)
+                else:
+                    game = loaded_game
             elif is_clicked(cursor, buttons[1]):
-                print("Moving Disk...")            
+                print(f"Moving Disk from {entries["source"].getText()} to {entries["destination"].getText()}...")  
+                start = entries["source"].getText()
+                end = entries["destination"].getText()
+                if start.isnumeric() and end.isnumeric():
+                    start = int(start)
+                    end = int(end)
+                    game.transfer(start, end)
+                    print(game)
+                else:
+                    print("failed to move disk")
+            for tower in towers: # prolly not ideal method
+                for ring in tower[1]:
+                    ring.undraw()
+                window.delItem(tower[0])
+            towers = draw_towers(window, game)
         except UnboundLocalError:
             window.close()
 main()
