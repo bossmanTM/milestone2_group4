@@ -161,6 +161,13 @@ def make_tower(tower:Tower, x:int, y:int, tower_width:int, pole_width:int, heigh
     return (pole, rings)
 
 def getIntOrDefault(string:str, default:int):
+    """
+    Purpose: get either an int from the string or a default int if not available
+    Parameters:
+        string: the string to search
+        default: the default int to return
+    retunes: either the int in the string or a default
+    """
     if string.isnumeric():
         print("test")
         return int(string)
