@@ -203,7 +203,6 @@ class Hanoi_Window: # using another class because classes are ok when you cant u
         tower_bottom = 250
         shaft_width = 5
         # Initialize and draw the towers with spacing in-between
-        to_draw = []
         for tower_num in range(0, 3):
             tower_x = margins + (tower_num * (tower_width))
             self._to_draw += self.make_tower(game.get_tower(tower_num), tower_x, tower_bottom, tower_width, shaft_width, tower_height)
