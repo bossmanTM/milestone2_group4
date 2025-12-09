@@ -1,4 +1,4 @@
-from graphics import *
+from graphics import GraphWin, Rectangle, Text, Point, Entry, Line 
 from stack import Stack
 import pickle
 
@@ -30,6 +30,7 @@ class Button:
         self._image[0].draw(window)
         self._image[1].draw(window)
         
+        
     def get_coords(self):
         """
         Purpose: To get the x and y coordinates of the button
@@ -37,6 +38,7 @@ class Button:
         Return: Two integers representing the x and y coordinates
         """          
         return self._x_pos, self._y_pos
+    
     
     def get_image(self):
         """
@@ -51,6 +53,29 @@ class Button:
         y_mid = (((self._y_pos * 2) + self._height)) // 2
         display = Text(Point(x_mid, y_mid), self._text)
         return base, display
+        
+        
+    def is_clicked(self, pt): # this function alone makes me want to turn our buttons into classes
+        # i wrote that comment before making this class
+        """
+        Purpose: To return True or False based on whether the user clicked the button
+        Parameters: 
+            pt: The that the mouse clicked called "pt"
+            rect: The Rectangle object called "rect"
+        Return: The boolean True or False ( True if the button was clicked )
+        """      
+        x, y = pt.getX(), pt.getY()
+        # p1, p2 = rect.getP1(), rect.getP2()
+        # x1, x2 = p1.getX(), p2.getX()
+        # y1, y2 = p1.getY(), p2.getY() just commenting that out cause thats a pretty pretty way to do this
+        
+        left_x, top_y = self._x_pos, self._y_pos
+        right_x, bottom_y = left_x + self._width, top_y + self._height
+        
+        if (left_x <= x <= right_x) and (top_y <= y <= bottom_y):
+            return True
+        return False
+    
     
 class Tower:
     def __init__(self, x_pos:int, max_disks:int):
@@ -61,9 +86,10 @@ class Tower:
             max_disks: The integer called "max_disks"
         Return: None
         """           
-        self._body = Rectangle(Point(x_pos, 250), Point((x_pos + 5), 450))
+        self._x_pos = x_pos
         self._max_disks = max_disks
         self._stack = Stack()
+        
         
     def __len__(self):
         """
@@ -73,11 +99,13 @@ class Tower:
         """ 
         return len(self._stack)
     
+    
     def __str__(self):
         string = ""
         for disk in self.get_disks():
             string += str(disk) + ", "
         return string[:-2]    
+    
     
     def add_disk(self, disk:Rectangle):
         """
@@ -87,13 +115,6 @@ class Tower:
         """           
         self._stack.push(disk)
         
-    def get_body(self):
-        """
-        Purpose: To return the red rectangle holding the disks (visually)
-        Parameters: None
-        Return: A rectangle object
-        """         
-        return self._body
     
     def get_disks(self):
         """
@@ -103,6 +124,7 @@ class Tower:
         """         
         return self._stack.get_lst()
         
+        
     def take_disk(self):
         """
         Purpose: To remove and return the top disk
@@ -111,6 +133,25 @@ class Tower:
         """        
         if len(self._stack) > 0:
             return self._stack.pop()
+            
+            
+    def build_tower(self, window):
+        pole = Rectangle(Point(self._x_pos, 250), Point((self._x_pos + 5), 450))        
+        pole.setFill("red")
+        pole.setOutline("black")
+        pole.draw(window)
+        diff_from_max = 5 - len(self)
+        objects = []
+        rings = self._stack.get_lst()
+        for i in range(len(rings)):
+            disk = len(self) - rings[i]
+            p1 = Point(self._x_pos - 220 + (155 + (disk * 12) + (diff_from_max * 12)), (430 + (i * -20)))
+            p2 = Point(self._x_pos - 220 + (290 + (disk * -12) + (diff_from_max * -12)), (450 + (i * -20)))
+            rect = Rectangle(p1, p2)
+            rect.setFill("blue")
+            objects.append(rect)
+        return objects
+
 
 class Hanoi:
     def __init__(self, disks:int, target:int):
@@ -123,35 +164,23 @@ class Hanoi:
         """        
         self._disks = disks
         self._target = target
-        self._towers = self.set_towers()
+        self._towers = self.make_towers()
         self._game_won = False
         self._steps = 0
         
-    def draw_towers(self, mode:str, window:GraphWin):
+                    
+    def draw(self, window:GraphWin):
         """
-        Purpose: 
-        Parameters: 
-            mode: The string called "mode" (value of "ud" undraws all the towers)
-            window: The GraphWin object called "window"
+        Purpose: To draw all the objects it is given
+        Parameters: window: the window to draw to
         Return: None
-        """        
+        """
+        objects = []
         for tower in self._towers:
-            base = tower.get_body()
-            base.setFill("red")
-            base.setOutline("black")
-            if mode == "ud":
-                base.undraw()
-            else:
-                base.draw(window)
-        for tower in range(len(self._towers)):
-            for disk in self._towers[tower].get_disks():
-                disk.setFill("blue")
-                disk.setOutline("red") 
-                if mode == "ud":
-                    disk.undraw()   
-                else:
-                    disk.draw(window)
+            objects += tower.build_tower(window)
+        return objects
                 
+                                
     def get_max_disks(self):
         """
         Purpose: To get the maximum number of disks each tower can have
@@ -159,6 +188,7 @@ class Hanoi:
         Return: An integer
         """           
         return self._disks
+    
     
     def get_target(self):
         """
@@ -168,6 +198,7 @@ class Hanoi:
         """           
         return self._target
     
+    
     def get_steps(self):
         """
         Purpose: To get the number of steps taken
@@ -176,6 +207,7 @@ class Hanoi:
         """                   
         return self._steps
     
+    
     def get_win(self):
         """
         Purpose: To determine if the user won the game
@@ -183,6 +215,7 @@ class Hanoi:
         Return: A boolean True or False
         """          
         return len(self._towers[self._target - 1]) == self._disks
+    
     
     def move_allowed(self, start:Tower, end:Tower, destination:int, source:int):
         """
@@ -197,76 +230,314 @@ class Hanoi:
         elif len(end) > 0:
             start_disk = start.get_disks()[0]
             end_disk = end.get_disks()[0]    
-            start_size = start_disk.getP2().getX() - start_disk.getP1().getX()
-            end_size = end_disk.getP2().getX() - end_disk.getP1().getX()
-            if start_size > end_size:
+            if start_disk > end_disk:
                 reason = "ERROR: can't put bigger disk on a smaller one. Please try again!"
                 return False, reason
         return True, ""
     
-    def move_disk(self, destination:int, source:int):
+    
+    def move_disk(self, source:int, destination:int):
         """
         Purpose: To move a disk with the proper x and y values
         Parameters: 
             destination: The integer called "destination"
             source: The integer called "source"
         Return: The string at allowed_move[1] if allowed_move[0] is False
-        """      
-        if source == destination or self._game_won == True:
+        """     
+        if source == destination or self._game_won:
             return        
         source -= 1
         destination -= 1
         start_tower = self._towers[source]
         end_tower = self._towers[destination]
         allowed_move = self.move_allowed(start_tower, end_tower, destination, source)
-        if allowed_move[0] == False:
+        if not allowed_move[0]:
             return allowed_move[1]
-        point_distance = 220 * (destination - source)
-        disk_to_move = start_tower.take_disk()
-        disk_to_move.move(point_distance, 0)
-        end_tower.add_disk(disk_to_move)
-        bottom = disk_to_move.getP2().getY()
-        disk_to_move.move(0, 40)
-        while bottom != 410:
-            if bottom > 410:
-                disk_to_move.move(0, -1)
-                bottom -= 1
-            elif bottom < 410:
-                disk_to_move.move(0, 1)
-                bottom += 1
-        disk_to_move.move(0, (-20 * (len(end_tower) - 1)))
+        end_tower.add_disk(start_tower.take_disk())
         self._steps += 1
-        self._game_won = self.get_win()
         
-    def set_towers(self):
+        
+    def make_towers(self):
         """
         Purpose: To create the three tower objects with the proper number of disks and spacing
         Parameters: None
-        Return: The list called "towers"
+        Return: a list containing the towers
         """       
         self._steps = 0
-        diff_from_max = 5 - self._disks
         towers = []
         for tower_num in range(3):
             x_pos = ((tower_num + 1) * 220)
             towers.append(Tower(x_pos, 3))
         for disk in range(self._disks):
-            p1 = Point((155 + (disk * 12) + (diff_from_max * 12)), (430 + (disk * -20)))
-            p2 = Point((290 + (disk * -12) + (diff_from_max * -12)), (450 + (disk * -20)))
-            towers[0].add_disk(Rectangle(p1, p2))
+            towers[0].add_disk(self._disks-disk)
         return towers
-    
-    def update_towers(self, disks:int, target:int, window:GraphWin):
+
+        
+def undraw_lst(objects):
+    """
+    Purpose: To draw all the objects it is given
+    Parameters: None
+    Return: None
+    """
+    for i in range(len(objects)):
+        object = objects.pop()
+        object.undraw()
+
+
+def draw_lst(objects, window):
+    why = []
+    for i in range(len(objects)):
+        object = objects.pop()
+        object.draw(window)
+        why.append(object)
+    return why        
+            
+
+class Hanoi_Entry: #this should extend entry if we were allowed to use inheritence
+    def __init__(self, point:Point, width:int, min:int, max:int):
         """
-        Purpose: To redraw all towers to fit any changes made
+        purpose: initialize an entry for Hanoi within a range
         Parameters: 
-            disks: The integer called "disks"
-            target: The integer called "target"
-            window: The GraphWin object called "window"
+            point: the point we are putting the entry
+            width: the width of the entry
+            min: the minimum value of the entry
+            max: the maximum value of the entry
+        """
+        self._min = min
+        self._max = max
+        self._entry = Entry(point, width)
+        self._objects = []
+        
+    def get_value(self) -> int:
+        """
+        Purpose: get the value of the entry as an int
+        Parameters: self: the entry
+        Returns: the value of the entry as an int or the nearest value within the range
+        """
+        val = self._entry.getText()
+        if val.isnumeric():
+            val = int(val)
+            if val <= self._min:
+                return self._min
+            elif val >= self._max:
+                return self._max
+            else:
+                return val
+        else:
+            return self._max
+            
+    def draw(self, window:GraphWin):
+        self._entry.draw(window)
+            
+
+class Hanoi_Graphics:
+    def __init__(self):
+        self._window = GraphWin("Hanoi Towers Game", 900, 600)
+        self._game = Hanoi(3,3)    
+        self._objects = self._game.draw(self._window)
+        self._entries = {}
+        self.make_entries()
+        self._buttons = {}
+        self._rings = []
+        
+        self._announcement = Text(Point(450, 495), "")
+        self._announcement.setSize(10)
+        self._announcement.setTextColor("red")
+        self._announcement.draw(self._window)
+        
+        self._header = Text(Point(450, 180), "Disks = 3. Target Tower = 3")    
+        self._header.setTextColor("green")
+        self._header.setSize(18)
+        self._header.draw(self._window)
+        a = []
+        test = Rectangle(Point(0, 0), Point(400, 400))
+        test.draw(self._window)
+        a.append(test)
+        a[0].undraw()
+        
+        
+        self.draw_static()
+        self._objects = draw_lst(self._objects, self._window)
+    
+    
+    def save_game(self, filename:str):
+        """
+        Purpose: To save the game
+        Parameters: 
+            filename: The name to save the game as
+            game: The game to save
         Return: None
-        """          
-        self._disks = disks
-        self._target = target
-        self.draw_towers("ud", window)
-        self._towers = self.set_towers()
-        self.draw_towers("d", window)
+        """
+        try:
+            with open(filename, "wb") as f:
+                pickle.dump(self._game, f)
+        except OSError:
+            print("failed to save the game")
+        return 
+        
+        
+    def load_game(self, filename:str):
+        """
+        Purpose: To load the game using a given filename
+        Parameters: filename: The name of the savefile to load
+        Return: A Hanoi object representing either the game with the filename or a new one if it doesnt exist
+        """
+        game = None
+        try:
+            with open(filename, "rb") as f:
+                game = pickle.load(f)
+        except OSError:
+            print("failed to open the game")
+        if not isinstance(game, Hanoi):
+            game = Hanoi(3, 3)
+        self._game = game
+
+
+    def announce(self, string:str):
+        """
+        Purpose: To draw the red text on the screen for errors or saving/loading
+        Parameters: 
+            string: the string to be announced
+        Return: The boolean True or False
+        """      
+        self._announcement.setText(string)
+
+
+    def make_entries(self):
+        """
+        Purpose: assemble the entries
+        Parameters: self: the game being handled
+        Return: None
+        """
+        self._entries.update({"disk count" : Hanoi_Entry(Point(430, 40), 2, 1, 10)})
+        self._entries.update({"target" : Hanoi_Entry(Point(430, 75), 2, 1, 3)})
+        self._entries.update({"source" : Hanoi_Entry(Point(157, 540), 2, 1, 3)})
+        self._entries.update({"destination" : Hanoi_Entry(Point(255, 540), 2, 1, 3)})
+    
+            
+    def draw_entries(self):
+        """
+        Purpose: Draw the entries
+        Parameters: None
+        Return None
+        """
+        for entry in self._entries:
+          self._entries[entry].draw(self._window) 
+        
+        
+    def draw_entry_labels(self):
+        """
+        Purpose: To draw the labels for our entries
+        Parameters: None
+        Return: None
+        """
+        # Initialize and draw the static graphics objects
+        objects = []
+        objects.append(Text(Point(230, 40), "Number of Disks? (Enter a positive int: 3 by default)"))
+        objects.append(Text(Point(219, 75), "Target Tower? (Enter a positive int: 3 by default)"))
+        objects.append(Line(Point(50, 450), Point(850, 450)))
+        objects.append(Text(Point(97, 540), "From tower?"))
+        objects.append(Text(Point(207, 540), "to tower?"))   
+        for object in objects:
+            object.draw(self._window)
+    
+    
+    def draw_buttons(self):
+        """
+        Purpose: draw the buttons
+        Parameters: None
+        Return: None
+        """
+        self._buttons.update({"Reset" :     Button(55, 110, 70, 30, "Reset")})
+        self._buttons.update({"Quit" :      Button(780, 40, 70, 30, "Quit")})
+        self._buttons.update({"Save" :      Button(780, 80, 70, 30, "Save")})
+        self._buttons.update({"Load" :      Button(780, 120, 70, 30, "Load")})
+        self._buttons.update({"Move Disk" : Button(300, 525, 100, 30, "Move Disk")})
+        for button in self._buttons:
+            self._buttons[button].draw(self._window)
+    
+    
+    def draw_static(self):
+        """
+        Purpose: draw all the stuff that doesnt move in the game
+        Parameters: None
+        Return None
+        """
+        self.draw_entries()
+        self.draw_entry_labels()
+        self.draw_buttons()
+
+    
+    def update_window(self):
+        """
+        Purpose: update potentially active objects on the screen
+        Parameters: None 
+        Return: None
+        """              
+        self.announce("")
+        self._header.setText(self.get_header_text())
+        undraw_lst(self._objects)
+        self._objects = self._game.draw(self._window)
+        self._objects = draw_lst(self._objects, self._window)
+        
+        
+    def get_header_text(self):
+        """
+        Purpose: get the text that the header should have
+        Parameters: None
+        Return: the header text
+        """
+        if not self._game.get_win():
+            return f"Disks = {self._game.get_max_disks()}. Target Tower = {self._game.get_target()}"
+        else:
+            return f"Congratulations! All disks have been moved to tower {self._game.get_target()} in {self._game.get_steps()} steps."
+            
+    
+    def handle_clicks(self):
+        """
+        Purpose: handle the clicks made by the person
+        Parameters: None
+        Return: True if the game should continue
+        """
+        
+        try:
+            cursor = self._window.getMouse()
+        except:
+            self._window.close()
+            return False 
+            
+        if self._buttons["Reset"].is_clicked(cursor):
+            print("Resetting...")
+            self._game = Hanoi(self._entries["disk count"].get_value(), self._entries["target"].get_value())
+            
+        elif self._buttons["Quit"].is_clicked(cursor):
+            print("Quitting...")
+            self._window.close()
+            return False
+            
+        elif self._buttons["Save"].is_clicked(cursor):
+            print("Saving...")
+            self.save_game("savefile")
+            
+        elif self._buttons["Load"].is_clicked(cursor):
+            print("Loading...")
+            self.load_game("savefile")
+            
+        elif self._buttons["Move Disk"].is_clicked(cursor):
+            start = self._entries["source"].get_value()
+            end = self._entries["destination"].get_value()
+            print(f"Moving Disk from {start} to {end}...") 
+            status = self._game.move_disk(start, end)
+            if status is not None:
+                print(status)
+            
+        return True
+
+    def frame_update(self):
+        """
+        Purpose: handle each frame
+        Parameters: None
+        Return: True if the game should continue
+        """
+        self.update_window()
+        return self.handle_clicks()
