@@ -17,7 +17,6 @@ def main():
     running = True
     while running:
         running = game.frame_update()
-        
-
 
 main()
+
