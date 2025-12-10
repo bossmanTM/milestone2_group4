@@ -449,7 +449,7 @@ class Hanoi_Graphics:
         Return None
         """
         for entry in self._entries:
-          self._entries[entry].draw(self._window) 
+            self._entries[entry].draw(self._window) 
         
         
     def draw_entry_labels(self):
@@ -566,3 +566,4 @@ class Hanoi_Graphics:
         """
         self.update_window()
         return self.handle_clicks()
+
