@@ -314,6 +314,8 @@ class Hanoi_Entry: #this should extend entry if we were allowed to use inheriten
             width: the width of the entry
             min: the minimum value of the entry
             max: the maximum value of the entry
+            default: the value to use if none is given
+        Returns: None
         """
         self._min = min
         self._max = max
@@ -423,7 +425,7 @@ class Hanoi_Graphics:
         Purpose: To draw the red text on the screen for errors or saving/loading
         Parameters: 
             string: the string to be announced
-        Return: The boolean True or False
+        Return: None
         """      
         self._announcement.setText(string)
 
