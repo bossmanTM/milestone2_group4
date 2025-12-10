@@ -136,6 +136,11 @@ class Tower:
             
             
     def build_tower(self, window):
+        """
+        Purpose: build a tower and draw the pole
+        Parameters: window: the window to draw to
+        Returns: the objects in the tower
+        """
         pole = Rectangle(Point(self._x_pos, 250), Point((self._x_pos + 5), 450))        
         pole.setFill("red")
         pole.setOutline("black")
@@ -275,8 +280,8 @@ class Hanoi:
         
 def undraw_lst(objects):
     """
-    Purpose: To draw all the objects it is given
-    Parameters: None
+    Purpose: To undraw all the objects it is given
+    Parameters: objects: the objects to undraw
     Return: None
     """
     for i in range(len(objects)):
@@ -285,6 +290,13 @@ def undraw_lst(objects):
 
 
 def draw_lst(objects, window):
+    """
+    Purpose: To draw all the objects it is given
+    Parameters: 
+        objects: the objects to draw
+        window: the window to draw to
+    Return: None
+    """
     why = []
     for i in range(len(objects)):
         object = objects.pop()
@@ -327,11 +339,21 @@ class Hanoi_Entry: #this should extend entry if we were allowed to use inheriten
             return self._max
             
     def draw(self, window:GraphWin):
+        """
+        Purpose: draw the entry object
+        Parameters: window: the window to draw to
+        Returns: None
+        """
         self._entry.draw(window)
             
 
 class Hanoi_Graphics:
     def __init__(self):
+        """
+        Purpose: initialize a Hanoi_Graphics object
+        Parameters: None
+        Returns: None
+        """
         self._window = GraphWin("Hanoi Towers Game", 900, 600)
         self._game = Hanoi(3,3)    
         self._objects = self._game.draw(self._window)
@@ -372,7 +394,8 @@ class Hanoi_Graphics:
             with open(filename, "wb") as f:
                 pickle.dump(self._game, f)
         except OSError:
-            print("failed to save the game")
+            self.announce("failed to save the game")
+        self.announce("loaded the game")
         return 
         
         
@@ -387,10 +410,11 @@ class Hanoi_Graphics:
             with open(filename, "rb") as f:
                 game = pickle.load(f)
         except OSError:
-            print("failed to open the game")
-        if not isinstance(game, Hanoi):
-            game = Hanoi(3, 3)
-        self._game = game
+            game = None
+        if game is None:
+            self.announce("failed to open the game")
+        else:
+            self._game = game
 
 
     def announce(self, string:str):
@@ -474,7 +498,6 @@ class Hanoi_Graphics:
         Parameters: None 
         Return: None
         """              
-        self.announce("")
         self._header.setText(self.get_header_text())
         undraw_lst(self._objects)
         self._objects = self._game.draw(self._window)
@@ -499,7 +522,6 @@ class Hanoi_Graphics:
         Parameters: None
         Return: True if the game should continue
         """
-        
         try:
             cursor = self._window.getMouse()
         except:
@@ -517,11 +539,11 @@ class Hanoi_Graphics:
             
         elif self._buttons["Save"].is_clicked(cursor):
             print("Saving...")
-            self.save_game("savefile")
+            self.save_game("game.p")
             
         elif self._buttons["Load"].is_clicked(cursor):
             print("Loading...")
-            self.load_game("savefile")
+            self.load_game("game.p")
             
         elif self._buttons["Move Disk"].is_clicked(cursor):
             start = self._entries["source"].get_value()
@@ -530,7 +552,7 @@ class Hanoi_Graphics:
             status = self._game.move_disk(start, end)
             if status is not None:
                 print(status)
-            
+        
         return True
 
     def frame_update(self):
