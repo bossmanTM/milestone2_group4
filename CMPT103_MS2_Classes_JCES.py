@@ -1,3 +1,8 @@
+# ----------------------------------
+# Jackman, Chase; Samson, Enrico
+# Programming Project - Milestone #2
+# ----------------------------------
+
 from graphics import GraphWin, Rectangle, Text, Point, Entry, Line 
 from stack import Stack
 import pickle
@@ -583,5 +588,6 @@ class Hanoi_Graphics:
         """
         self.update_window()
         return self.handle_clicks()
+
 
 
