@@ -306,7 +306,7 @@ def draw_lst(objects, window):
             
 
 class Hanoi_Entry: #this should extend entry if we were allowed to use inheritence
-    def __init__(self, point:Point, width:int, min:int, max:int):
+    def __init__(self, point:Point, width:int, min:int, max:int, default:int):
         """
         purpose: initialize an entry for Hanoi within a range
         Parameters: 
@@ -317,6 +317,7 @@ class Hanoi_Entry: #this should extend entry if we were allowed to use inheriten
         """
         self._min = min
         self._max = max
+        self._default = default
         self._entry = Entry(point, width)
         self._objects = []
         
@@ -336,7 +337,7 @@ class Hanoi_Entry: #this should extend entry if we were allowed to use inheriten
             else:
                 return val
         else:
-            return self._max
+            return self._default
             
     def draw(self, window:GraphWin):
         """
@@ -433,10 +434,10 @@ class Hanoi_Graphics:
         Parameters: self: the game being handled
         Return: None
         """
-        self._entries.update({"disk count" : Hanoi_Entry(Point(430, 40), 2, 1, 10)})
-        self._entries.update({"target" : Hanoi_Entry(Point(430, 75), 2, 1, 3)})
-        self._entries.update({"source" : Hanoi_Entry(Point(157, 540), 2, 1, 3)})
-        self._entries.update({"destination" : Hanoi_Entry(Point(255, 540), 2, 1, 3)})
+        self._entries.update({"disk count" : Hanoi_Entry(Point(430, 40), 2, 1, 10, 3)})
+        self._entries.update({"target" : Hanoi_Entry(Point(430, 75), 2, 1, 3, 3)})
+        self._entries.update({"source" : Hanoi_Entry(Point(157, 540), 2, 1, 3, 1)})
+        self._entries.update({"destination" : Hanoi_Entry(Point(255, 540), 2, 1, 3, 3)})
     
             
     def draw_entries(self):
