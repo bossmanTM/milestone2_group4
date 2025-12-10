@@ -274,7 +274,7 @@ class Hanoi:
             x_pos = ((tower_num + 1) * 220)
             towers.append(Tower(x_pos, 3))
         for disk in range(self._disks):
-            towers[0].add_disk(self._disks-disk)
+            towers[0].add_disk(self._disks - disk)
         return towers
 
         
@@ -285,8 +285,8 @@ def undraw_lst(objects):
     Return: None
     """
     for i in range(len(objects)):
-        object = objects.pop()
-        object.undraw()
+        g_object = objects.pop()
+        g_object.undraw()
 
 
 def draw_lst(objects, window):
@@ -295,18 +295,18 @@ def draw_lst(objects, window):
     Parameters: 
         objects: the objects to draw
         window: the window to draw to
-    Return: None
+    Return: The list of the objects
     """
-    why = []
+    lst = []
     for i in range(len(objects)):
-        object = objects.pop()
-        object.draw(window)
-        why.append(object)
-    return why        
+        g_object = objects.pop()
+        g_object.draw(window)
+        lst.append(g_object)
+    return lst       
             
 
 class Hanoi_Entry: #this should extend entry if we were allowed to use inheritence
-    def __init__(self, point:Point, width:int, min:int, max:int, default:int):
+    def __init__(self, point:Point, width:int, minimum:int, maximum:int, default:int):
         """
         purpose: initialize an entry for Hanoi within a range
         Parameters: 
@@ -317,11 +317,20 @@ class Hanoi_Entry: #this should extend entry if we were allowed to use inheriten
             default: the value to use if none is given
         Returns: None
         """
-        self._min = min
-        self._max = max
+        self._min = minimum
+        self._max = maximum
         self._default = default
         self._entry = Entry(point, width)
         self._objects = []
+        self._entry.setText(default)
+        
+    def get_entry(self) -> Entry:
+        """
+        Purpose: Get the entry
+        Parameters: self: None
+        Returns: The entry itself
+        """        
+        return self._entry
         
     def get_value(self) -> int:
         """
@@ -339,6 +348,8 @@ class Hanoi_Entry: #this should extend entry if we were allowed to use inheriten
             else:
                 return val
         else:
+            self._entry.setText(self._default)
+            self._entry.setFill("yellow")
             return self._default
             
     def draw(self, window:GraphWin):
@@ -397,8 +408,8 @@ class Hanoi_Graphics:
             with open(filename, "wb") as f:
                 pickle.dump(self._game, f)
         except OSError:
-            self.announce("failed to save the game")
-        self.announce("loaded the game")
+            self.announce("Failed to save the game.")
+        self.announce("Game saved.")
         return 
         
         
@@ -415,8 +426,9 @@ class Hanoi_Graphics:
         except OSError:
             game = None
         if game is None:
-            self.announce("failed to open the game")
+            self.announce("Can't load a saved game or no game has been saved.")
         else:
+            self.announce("Game loaded.")
             self._game = game
 
 
@@ -465,8 +477,8 @@ class Hanoi_Graphics:
         objects.append(Line(Point(50, 450), Point(850, 450)))
         objects.append(Text(Point(97, 540), "From tower?"))
         objects.append(Text(Point(207, 540), "to tower?"))   
-        for object in objects:
-            object.draw(self._window)
+        for g_object in objects:
+            g_object.draw(self._window)
     
     
     def draw_buttons(self):
@@ -527,6 +539,11 @@ class Hanoi_Graphics:
         """
         try:
             cursor = self._window.getMouse()
+            
+            self.announce("")
+            for entry in self._entries:
+                # Set entries fill to gray to ensure they do not stay yellow when input is invalid        
+                self._entries[entry].get_entry().setFill("gray")
         except:
             self._window.close()
             return False 
@@ -554,8 +571,8 @@ class Hanoi_Graphics:
             print(f"Moving Disk from {start} to {end}...") 
             status = self._game.move_disk(start, end)
             if status is not None:
+                self.announce(status)
                 print(status)
-        
         return True
 
     def frame_update(self):
@@ -566,4 +583,5 @@ class Hanoi_Graphics:
         """
         self.update_window()
         return self.handle_clicks()
+
 
